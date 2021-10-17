@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/the-tasting-app/static/css/main.a617e044.chunk.css",
-    "main.js": "/the-tasting-app/static/js/main.79184166.chunk.js",
-    "main.js.map": "/the-tasting-app/static/js/main.79184166.chunk.js.map",
-    "runtime-main.js": "/the-tasting-app/static/js/runtime-main.c03f5a83.js",
-    "runtime-main.js.map": "/the-tasting-app/static/js/runtime-main.c03f5a83.js.map",
-    "static/js/2.71e25e26.chunk.js": "/the-tasting-app/static/js/2.71e25e26.chunk.js",
-    "static/js/2.71e25e26.chunk.js.map": "/the-tasting-app/static/js/2.71e25e26.chunk.js.map",
-    "static/js/3.ca6f8ed1.chunk.js": "/the-tasting-app/static/js/3.ca6f8ed1.chunk.js",
-    "static/js/3.ca6f8ed1.chunk.js.map": "/the-tasting-app/static/js/3.ca6f8ed1.chunk.js.map",
+    "main.js": "/the-tasting-app/static/js/main.eb98713a.chunk.js",
+    "main.js.map": "/the-tasting-app/static/js/main.eb98713a.chunk.js.map",
+    "runtime-main.js": "/the-tasting-app/static/js/runtime-main.10c6b17e.js",
+    "runtime-main.js.map": "/the-tasting-app/static/js/runtime-main.10c6b17e.js.map",
+    "static/js/2.69fe3010.chunk.js": "/the-tasting-app/static/js/2.69fe3010.chunk.js",
+    "static/js/2.69fe3010.chunk.js.map": "/the-tasting-app/static/js/2.69fe3010.chunk.js.map",
+    "static/js/3.495cef7c.chunk.js": "/the-tasting-app/static/js/3.495cef7c.chunk.js",
+    "static/js/3.495cef7c.chunk.js.map": "/the-tasting-app/static/js/3.495cef7c.chunk.js.map",
     "index.html": "/the-tasting-app/index.html",
     "static/css/main.a617e044.chunk.css.map": "/the-tasting-app/static/css/main.a617e044.chunk.css.map",
-    "static/js/2.71e25e26.chunk.js.LICENSE.txt": "/the-tasting-app/static/js/2.71e25e26.chunk.js.LICENSE.txt"
+    "static/js/2.69fe3010.chunk.js.LICENSE.txt": "/the-tasting-app/static/js/2.69fe3010.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.c03f5a83.js",
-    "static/js/2.71e25e26.chunk.js",
+    "static/js/runtime-main.10c6b17e.js",
+    "static/js/2.69fe3010.chunk.js",
     "static/css/main.a617e044.chunk.css",
-    "static/js/main.79184166.chunk.js"
+    "static/js/main.eb98713a.chunk.js"
   ]
 }
