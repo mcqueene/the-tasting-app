@@ -16,17 +16,22 @@ const App = (props) => {
   //const fileArray = getMasterFile()
   //fileArray = sendGetRequest(url);
   //console.log(fileArray)
+  const [pageSize, setpageSize] = React.useState(20);
   const [inputMasterFile, setinputMasterFile] = React.useState([])
   const [inputMasterListArray, setinputMasterListArray] = React.useState([]);
   const [beerNameFilterValue, setbeerNameFilterValue] = React.useState('');
   const [brewerFilterValue, setbrewerFilterValue] = React.useState('');
-  const updatedOn = '5/5/2022'
+  const updatedOn = '5/6/2022'
 
   //used to track when the user object if finally loaded
    React.useEffect(() => {
      loadMasterList()
    }, [])
 
+  const onPageSizeChangeEvent = (e) => {
+    console.log("onPageSizeChangeEvent", e)
+    setpageSize(e);
+  }
 
   const loadMasterList = async () => {
       //const url = 'https://github.com/mcqueene/the-tasting-app/blob/e4dd46ce51731314a8ec3c0d2d7a3f1db4e48704/btg_master_list_20211003.json'
@@ -166,6 +171,7 @@ const App = (props) => {
       <Box>
         <Box sx={{mx: 'auto',width: 'auto', textAlign: 'center', }}>
           <Typography align="center" variant="h5">The Tasting App</Typography>
+          <Typography align="center" variant="subtitle1">Updated on: {updatedOn} Total Number: {inputMasterListArray.length}</Typography>
         </Box>
         <Box >
           <Box sx={{mx: 'auto', flexGrow: 1, textAlign: 'center', m: 1, p:1 }}>
@@ -194,7 +200,11 @@ const App = (props) => {
                     rows={inputMasterListArray}
                     columns={columns}
                     rowsPerPageOptions={[5,10,20,30,50,100]}
-                    pageSize={20}
+                    pageSize={pageSize}
+                    onPageSizeChange={onPageSizeChangeEvent}
+                    pagination
+                    autoPageSize
+                    autoHeight={true}
                     disableSelectionOnClick
                     components={{
                       Toolbar: MyExportButton,
