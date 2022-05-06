@@ -31,6 +31,8 @@ const App = (props) => {
   const loadMasterList = async () => {
       //const url = 'https://github.com/mcqueene/the-tasting-app/blob/e4dd46ce51731314a8ec3c0d2d7a3f1db4e48704/btg_master_list_20211003.json'
       const url = 'https://raw.githubusercontent.com/mcqueene/the-tasting-app/master/btg_master_list.json'
+      //mrm for some reason the file is from the src direction and not the data sub directory
+      // i don't know why
       const changeFile = await sendGetRequest(url)
       console.log('file loaded from github with row count = ',changeFile.length)
       setinputMasterFile(changeFile)
