@@ -98,7 +98,7 @@ const App = (props) => {
       {
         field: 'DateTasted',
         headerName: 'Date',
-        width: 110,
+        width: 115,
         editable: false,
       },
       {
@@ -158,11 +158,6 @@ const App = (props) => {
         width: 250,
         editable: false,
       },
-      { field: 'id',
-      headerName: 'row#',
-      sortable: true,
-      width: 115
-    },
     ];
 
   return (
