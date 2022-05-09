@@ -1,16 +1,15 @@
 ﻿#ConvertFrom-Csv -Header "Date","Beer","Stated Style","Container","Taste","Style","Overall Score","Brewer","City","State/Country","Comments","ABV","Org Gravity","IBU" |   
 
-function TastingFileToArray($File) {
+function TastingFileToArray($File, $RowCount) {
     $input_master_file =  $File | 
         Select "Date","Beer","Stated Style","Container","Taste","Style","Overall Score","Brewer","City","State/Country","Comments","ABV" 
     #filter blanks
     $input_master_file = $input_master_file | ? {( $_.Date -ne $null) -and ($_.Beer -ne $null) } 
 
-    [int]$rowcount = 2
     [array]$newarray = $null
 
     foreach($row in $input_master_file) {
-        [int]$id = $rowcount
+        [int]$id = $RowCount
         [string]$Beer = $row.Beer
         [string]$DateTasted = ''
         if($row.Date -as [double]) {
@@ -72,8 +71,10 @@ function TastingFileToArray($File) {
         if($ABV -lt 1) {
             $ABV = $ABV * 100
         }
+        [string]$key = $Beer + $DateTasted
+        $key = $key -replace '[^a-zA-Z0-9]', ''
+        #$key = $key -replace '\W', ''
     
-        $rowcount++
         $obj = new-object PSObject
         $obj | add-member -membertype NoteProperty -name "Beer" -Value $Beer
         $obj | add-member -membertype NoteProperty -name "DateTasted" -Value $DateTasted
@@ -88,8 +89,10 @@ function TastingFileToArray($File) {
         $obj | add-member -membertype NoteProperty -name "Comments" -Value $Comments
         $obj | add-member -membertype NoteProperty -name "Container" -Value $Container
         $obj | add-member -membertype NoteProperty -name "id" -Value $id
+        $obj | add-member -membertype NoteProperty -name "key" -Value $key
 
         $newarray += $obj
+        $RowCount++
     }
 
     $newarray
