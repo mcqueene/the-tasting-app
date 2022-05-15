@@ -21,7 +21,7 @@ const App = (props) => {
   const [inputMasterListArray, setinputMasterListArray] = React.useState([]);
   const [beerNameFilterValue, setbeerNameFilterValue] = React.useState('');
   const [brewerFilterValue, setbrewerFilterValue] = React.useState('');
-  const updatedOn = '5/7/2022'
+  const [updatedOn, setupdatedOn] = React.useState('5/7/2022')
 
   //used to track when the user object if finally loaded
    React.useEffect(() => {
@@ -40,6 +40,9 @@ const App = (props) => {
       // i don't know why
       const changeFile = await sendGetRequest(url)
       console.log('file loaded from github with row count = ',changeFile.length)
+      const firstobj = changeFile[0]
+      setupdatedOn(firstobj.DateTasted)
+      console.log('last taste date', firstobj)
       setinputMasterFile(changeFile)
   }
 
