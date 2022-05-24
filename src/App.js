@@ -21,7 +21,7 @@ const App = (props) => {
   const [inputMasterListArray, setinputMasterListArray] = React.useState([]);
   const [beerNameFilterValue, setbeerNameFilterValue] = React.useState('');
   const [brewerFilterValue, setbrewerFilterValue] = React.useState('');
-  const [updatedOn, setupdatedOn] = React.useState('5/7/2022')
+  const [updatedOn, setupdatedOn] = React.useState('')
 
   //used to track when the user object if finally loaded
    React.useEffect(() => {
