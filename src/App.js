@@ -7,6 +7,8 @@ import React from 'react';
 import {DataGrid, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
 import {TextField,Box, Typography, Paper} from '@mui/material';
 import {sendGetRequest} from './FileService';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 //import { makeStyles } from '@mui/styles';
 
 const App = (props) => {
@@ -27,7 +29,41 @@ const App = (props) => {
    React.useEffect(() => {
      loadMasterList()
    }, [])
+/* 
+   React.useEffect(() => {
+    //run filter
+    let newArray = [];
+    const newValue = beerNameFilterValue;
+    if(newValue.length !== 0) {
+      newArray = inputMasterFile.filter((obj) => obj.Beer.toUpperCase().includes(newValue.toUpperCase()));
+      if(brewerFilterValue.length > 0) {
+        newArray = newArray.filter((obj) => obj.Brewer.toUpperCase().includes(brewerFilterValue.toUpperCase()));
+      }
+    }
+    else {
+      newArray = inputMasterFile.filter((obj) => obj.Brewer.toUpperCase().includes(brewerFilterValue.toUpperCase()));
+    }
+    setinputMasterListArray(newArray);
+    //setbeerNameFilterValue(newValue);    
+  }, [beerNameFilterValue])
 
+  React.useEffect(() => {
+    //run filter
+    let newArray = [];
+    const newValue = brewerFilterValue
+    if(newValue.length !== 0) {
+      newArray = inputMasterFile.filter((obj) => obj.Brewer.toUpperCase().includes(newValue.toUpperCase()));
+      if(beerNameFilterValue.length > 0) {
+        newArray = newArray.filter((obj) => obj.Beer.toUpperCase().includes(beerNameFilterValue.toUpperCase()));
+      }
+    }
+    else {
+      newArray = inputMasterFile.filter((obj) => obj.Beer.toUpperCase().includes(beerNameFilterValue.toUpperCase()));
+    }
+    setinputMasterListArray(newArray);
+    //setbrewerFilterValue(newValue);
+  }, [brewerFilterValue])
+ */
   const onPageSizeChangeEvent = (e) => {
     console.log("onPageSizeChangeEvent", e)
     setpageSize(e);
@@ -58,7 +94,7 @@ const App = (props) => {
     else {
       newArray = inputMasterFile.filter((obj) => obj.Brewer.toUpperCase().includes(brewerFilterValue.toUpperCase()));
     }
-  setinputMasterListArray(newArray);
+    setinputMasterListArray(newArray);
     setbeerNameFilterValue(newValue);
   };
   const onBrewerFilterChange = (event) => {
@@ -191,6 +227,11 @@ const App = (props) => {
                 onChange={onBrewerFilterChange}
                 value={brewerFilterValue}
             />
+{/*             
+            <Button 
+              onClick={() => {setbeerNameFilterValue('');setbrewerFilterValue(''); }}
+              variant="contained">Clear Filters</Button> 
+              */}
           </Box>
           </Box>
           <div style={{ height: 600, width: '98%' }}>
