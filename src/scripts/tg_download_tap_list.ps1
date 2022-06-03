@@ -1,6 +1,9 @@
-﻿[string]$tg_beer_list_json = Invoke-WebRequest -Uri  https://server.digitalpour.com/DashboardServer/api/v3/MenuItems/56ba39265e002c0c8446de27/1/Tap?apiKey=56ba38b25e002c0d38510298 
+﻿cd 'C:\Users\matt\OneDrive\Beer Club'
+[string]$tg_beer_list_json = Invoke-WebRequest -Uri  https://server.digitalpour.com/DashboardServer/api/v3/MenuItems/56ba39265e002c0c8446de27/1/Tap?apiKey=56ba38b25e002c0d38510298 
 
 [array]$newmasterlist = Import-Excel -Path 'NewCombinedList.xlsx' -Raw
+#$ht_source = @{}
+#$newmasterlist | % {$ht_source[$_.key] = $_.DateTasted}
 
 
 $json_objs = $tg_beer_list_json | ConvertFrom-Json
@@ -19,12 +22,16 @@ foreach($beer in $json_objs) {
     $year = $beer.MenuItemProductDetail.Year
     $dateon = $beer.DatePutOn
     $active = $beer.Active
+    $key = $beername -replace '[^a-zA-Z0-9]', ''
     #Write-Host $tapnumber $dayson $beername $brewery $brewerylocation
 
     if($beveragetype -eq 'Beer'){
-        [array]$foundlist = $newmasterlist | Where-Object Beer -Match $beername
+        #[array]$foundlist = $newmasterlist | Where-Object Beer -Match $beername
+        [array]$foundlist = $newmasterlist | Where-Object key -Match $key
+        #$find = $ht_source[$key]
+        #if($find -eq $null) {
         if($foundlist.Length -eq 0) {
-            Write-Host $tapnumber $beername $brewery $abv $active $dateon
+            Write-Host $tapnumber $beername $brewery $abv $active $dateon $key
             #Write-Host 'no match->'$beername'<'
 
             $obj = new-object PSObject
@@ -38,6 +45,7 @@ foreach($beer in $json_objs) {
             $obj | add-member -membertype NoteProperty -name "Year" -Value $year
             $obj | add-member -membertype NoteProperty -name "DateKegged" -Value $dateon
             $obj | add-member -membertype NoteProperty -name "Active" -Value $active
+
             $notfound += $obj
         }
     }
