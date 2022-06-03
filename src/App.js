@@ -23,47 +23,34 @@ const App = (props) => {
   const [inputMasterListArray, setinputMasterListArray] = React.useState([]);
   const [beerNameFilterValue, setbeerNameFilterValue] = React.useState('');
   const [brewerFilterValue, setbrewerFilterValue] = React.useState('');
-  const [updatedOn, setupdatedOn] = React.useState('')
+  const [updatedOn, setupdatedOn] = React.useState('');
+  const [totalCount, settotalCount] = React.useState(0);
 
   //used to track when the user object if finally loaded
    React.useEffect(() => {
      loadMasterList()
    }, [])
-/* 
-   React.useEffect(() => {
-    //run filter
-    let newArray = [];
-    const newValue = beerNameFilterValue;
-    if(newValue.length !== 0) {
-      newArray = inputMasterFile.filter((obj) => obj.Beer.toUpperCase().includes(newValue.toUpperCase()));
-      if(brewerFilterValue.length > 0) {
-        newArray = newArray.filter((obj) => obj.Brewer.toUpperCase().includes(brewerFilterValue.toUpperCase()));
-      }
-    }
-    else {
-      newArray = inputMasterFile.filter((obj) => obj.Brewer.toUpperCase().includes(brewerFilterValue.toUpperCase()));
-    }
-    setinputMasterListArray(newArray);
-    //setbeerNameFilterValue(newValue);    
-  }, [beerNameFilterValue])
 
-  React.useEffect(() => {
+   React.useEffect(() => {
+    const applyFilters = (beerName, brewerName) => {
+      let newArray = [];
+      if(beerName.length !==0 ) {
+        newArray = inputMasterFile.filter((obj) => obj.Beer.toUpperCase().includes(beerName.toUpperCase()));
+        if(brewerName.length !== 0) {
+          newArray = newArray.filter((obj) => obj.Brewer.toUpperCase().includes(brewerName.toUpperCase()));
+        }
+      } else {
+        if(brewerName.length !== 0) {
+          newArray = inputMasterFile.filter((obj) => obj.Brewer.toUpperCase().includes(brewerName.toUpperCase()));
+        }
+      }    
+      setinputMasterListArray(newArray);
+    }  
     //run filter
-    let newArray = [];
-    const newValue = brewerFilterValue
-    if(newValue.length !== 0) {
-      newArray = inputMasterFile.filter((obj) => obj.Brewer.toUpperCase().includes(newValue.toUpperCase()));
-      if(beerNameFilterValue.length > 0) {
-        newArray = newArray.filter((obj) => obj.Beer.toUpperCase().includes(beerNameFilterValue.toUpperCase()));
-      }
-    }
-    else {
-      newArray = inputMasterFile.filter((obj) => obj.Beer.toUpperCase().includes(beerNameFilterValue.toUpperCase()));
-    }
-    setinputMasterListArray(newArray);
-    //setbrewerFilterValue(newValue);
-  }, [brewerFilterValue])
- */
+    applyFilters(beerNameFilterValue, brewerFilterValue)
+  }, [beerNameFilterValue, brewerFilterValue, inputMasterFile])
+
+ 
   const onPageSizeChangeEvent = (e) => {
     console.log("onPageSizeChangeEvent", e)
     setpageSize(e);
@@ -76,41 +63,22 @@ const App = (props) => {
       // i don't know why
       const changeFile = await sendGetRequest(url)
       console.log('file loaded from github with row count = ',changeFile.length)
+      settotalCount(changeFile.length)
       const firstobj = changeFile[0]
       setupdatedOn(firstobj.DateTasted)
       console.log('last taste date', firstobj)
-      setinputMasterFile(changeFile)
+
+      const sortedArray = [...changeFile].sort((a, b) =>  a.Beer > b.Beer ? 1 : -1);
+
+      setinputMasterFile(sortedArray)
   }
 
   const onBeerNameFilterChange = (event) => {
-    let newArray = [];
-    const newValue = event.target.value;
-    if(newValue.length !== 0) {
-      newArray = inputMasterFile.filter((obj) => obj.Beer.toUpperCase().includes(newValue.toUpperCase()));
-      if(brewerFilterValue.length > 0) {
-        newArray = newArray.filter((obj) => obj.Brewer.toUpperCase().includes(brewerFilterValue.toUpperCase()));
-      }
-    }
-    else {
-      newArray = inputMasterFile.filter((obj) => obj.Brewer.toUpperCase().includes(brewerFilterValue.toUpperCase()));
-    }
-    setinputMasterListArray(newArray);
+    const newValue = event.target.value;  
     setbeerNameFilterValue(newValue);
   };
   const onBrewerFilterChange = (event) => {
-    let newArray = [];
     const newValue = event.target.value;
-    if(newValue.length !== 0) {
-      newArray = inputMasterFile.filter((obj) => obj.Brewer.toUpperCase().includes(newValue.toUpperCase()));
-      if(beerNameFilterValue.length > 0) {
-        newArray = newArray.filter((obj) => obj.Beer.toUpperCase().includes(beerNameFilterValue.toUpperCase()));
-      }
-    }
-    else {
-      //console.log('filter on ', beerNameFilterValue.toUpperCase)
-      newArray = inputMasterFile.filter((obj) => obj.Beer.toUpperCase().includes(beerNameFilterValue.toUpperCase()));
-    }
-    setinputMasterListArray(newArray);
     setbrewerFilterValue(newValue);
   };
 
@@ -205,10 +173,12 @@ const App = (props) => {
       <Box>
         <Box sx={{mx: 'auto',width: 'auto', textAlign: 'center', }}>
           <Typography align="center" variant="h5">The Tasting App</Typography>
-          <Typography align="center" variant="subtitle1">Updated on: {updatedOn} Total Number: {inputMasterListArray.length}</Typography>
+          <Typography align="center" variant="subtitle1">Updated on: {updatedOn} Filtered Count: {inputMasterListArray.length} Total Count: {totalCount}</Typography>
         </Box>
         <Box >
           <Box sx={{mx: 'auto', flexGrow: 1, textAlign: 'center', m: 1, p:1 }}>
+          <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
+
             <TextField
                 required
                 id="outlined-required"
@@ -227,11 +197,12 @@ const App = (props) => {
                 onChange={onBrewerFilterChange}
                 value={brewerFilterValue}
             />
-{/*             
+           
             <Button 
               onClick={() => {setbeerNameFilterValue('');setbrewerFilterValue(''); }}
-              variant="contained">Clear Filters</Button> 
-              */}
+              variant="contained">Clear Filters
+            </Button> 
+          </Stack>  
           </Box>
           </Box>
           <div style={{ height: 600, width: '98%' }}>
@@ -248,7 +219,16 @@ const App = (props) => {
                     components={{
                       Toolbar: MyExportButton,
                     }}
-                />
+                    initialState={{
+                        sorting:{
+                        sortModel: [
+                          {field: 'Beer', 
+                          sort: 'asc',
+                          }
+                        ],
+                      },
+                    }}
+/>
             </div>
 
       </Box>
