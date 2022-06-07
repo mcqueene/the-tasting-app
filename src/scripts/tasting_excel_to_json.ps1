@@ -1,4 +1,5 @@
 ﻿. 'C:\Users\matt\OneDrive\Beer Club\tasting_file_to_array_function.ps1'
+. 'C:\Users\matt\OneDrive\Beer Club\normalize_data_functions.ps1'
 cd 'C:\Users\matt\OneDrive\Beer Club'
 
 $d_start = get-date
