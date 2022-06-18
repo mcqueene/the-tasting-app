@@ -20,6 +20,12 @@ $ht_style = @{
     “Amber Beer” = “Amber Ale”
     “Amber / Red” = “Amber Ale”
     “Amber/Red ale” = “Amber Ale”
+    “Amber ale” = “Amber Ale”
+    “American Barley wine” = “American Barley Wine”
+    “American barleywine” = “American Barley Wine”
+    “American Barleyeine” = “American Barley Wine”
+ 
+
 }
 
 $ht_brewer = @{

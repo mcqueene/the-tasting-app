@@ -52,3 +52,4 @@ foreach($beer in $json_objs) {
 }
 
 $notfound | Export-Csv -Path 'TG_NotFound_List.csv' -NoTypeInformation
+$notfound | Export-Excel -Path 'TG_NotFound_List.xlsx'
