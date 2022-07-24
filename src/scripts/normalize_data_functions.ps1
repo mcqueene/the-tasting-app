@@ -10,6 +10,7 @@ $ht_style = @{
     “Abbey Style Ale” = “Abbey Ale”
     “Amber” = “Amber Ale”
     “Ale,ESB” = “ESB”
+    “Ale, ESB” = “ESB”
     “Ale, Rausch” = “Rauchbier”
     “Ale, Saisson” = “Saison”
     “Ale, Saisson, tripel” = “Saison”
@@ -24,7 +25,16 @@ $ht_style = @{
     “American Barley wine” = “American Barley Wine”
     “American barleywine” = “American Barley Wine”
     “American Barleyeine” = “American Barley Wine”
- 
+    "Amber lager" = "Amber Lager"
+    "American Blonde" = "American Blonde Ale"
+    "American Brown" = "American Brown Ale"
+    "American Ipa" = "American IPA"
+    "American lager" = "American Lager"
+    "American light" = "American Light"
+    "American PA" = "American Pale Ale"
+    "American Pale" = "American Pale Ale"
+    "American Pale ale" = "American Pale Ale"
+    "American Plae" = "American Pale Ale"
 
 }
 
