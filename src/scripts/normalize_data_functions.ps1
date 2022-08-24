@@ -35,7 +35,13 @@ $ht_style = @{
     "American Pale" = "American Pale Ale"
     "American Pale ale" = "American Pale Ale"
     "American Plae" = "American Pale Ale"
-
+    "American Plae Ale" = "American Pale Ale"
+    "American sour" = "American Sour"
+    "American Sour Ale" = "American Sour"
+    "American Whaet" = "American Wheat Ale"
+    "American Wheat" = "American Wheat Ale"
+    "Pis" = "Pilsner"
+    "Pils" = "Pilsner"
 }
 
 $ht_brewer = @{
@@ -53,6 +59,10 @@ $ht_brewer = @{
     "AleSmith Brewing Co." = "AleSmith Brewing Company"
 }
 
+function NormalizeKey {
+    param ( [string]$InputKey = '')
+    return ($InputKey -replace '[^a-zA-Z0-9]', '').ToLower()
+}
 
 function NormalizeState{
     param (
