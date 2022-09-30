@@ -177,6 +177,12 @@ const App = (props) => {
       editable: false,
     },
     {
+      field: 'Vintage',
+      headerName: 'Vintage',
+      width: 150,
+      editable: false,
+    },
+    {
       field: 'Comments',
       headerName: 'Comments',
       width: 250,
