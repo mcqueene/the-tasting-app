@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/the-tasting-app/static/css/main.a617e044.chunk.css",
-    "main.js": "/the-tasting-app/static/js/main.d063fd57.chunk.js",
-    "main.js.map": "/the-tasting-app/static/js/main.d063fd57.chunk.js.map",
+    "main.js": "/the-tasting-app/static/js/main.5768912c.chunk.js",
+    "main.js.map": "/the-tasting-app/static/js/main.5768912c.chunk.js.map",
     "runtime-main.js": "/the-tasting-app/static/js/runtime-main.0e3e9165.js",
     "runtime-main.js.map": "/the-tasting-app/static/js/runtime-main.0e3e9165.js.map",
     "static/js/2.3dc9a520.chunk.js": "/the-tasting-app/static/js/2.3dc9a520.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.0e3e9165.js",
     "static/js/2.3dc9a520.chunk.js",
     "static/css/main.a617e044.chunk.css",
-    "static/js/main.d063fd57.chunk.js"
+    "static/js/main.5768912c.chunk.js"
   ]
 }
