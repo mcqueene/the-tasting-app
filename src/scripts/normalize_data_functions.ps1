@@ -1,4 +1,42 @@
-﻿$ht_state = @{
+﻿<#
+
+'2020 matt' -replace "^([2][0][012][0-9])", '**'
+$found = '2021 matt' -match '^([2][0][012][0-9])'
+if ($found) {
+    $matches[1]
+}
+
+'2021 matt brewing CO' -match 'co$'
+'2021 matt brewing COmpany' -match 'co$'
+
+#>
+function ShortenBrewer{
+    param (
+             [string]$InputString = ''
+         )
+    [string]$newvalue = $InputString
+    $newvalue = $newvalue -replace 'Brewing Company',''
+    $newvalue = $newvalue -replace 'Brewing Co',''
+    $newvalue = $newvalue -replace 'Brewing Co.',''
+    $newvalue = $newvalue -replace 'Brewing',''
+    $newvalue = $newvalue -replace 'Brewery',''
+    return $newvalue
+}
+
+
+
+function ExtractVintage {
+    param ( [string]$InputKey = '')
+    [string]$vintage = ''
+    $found = $InputKey -match '^.*([2][0][012][0-9])'
+    if($found) {
+        $vintage = ($matches[1]).Trim()
+    }
+    return $vintage
+}
+
+
+$ht_state = @{
     “CA” = “California”
     "KS" = "Kansas"
     "OK" = "Oklahoma"
@@ -40,6 +78,13 @@ $ht_style = @{
     "American Sour Ale" = "American Sour"
     "American Whaet" = "American Wheat Ale"
     "American Wheat" = "American Wheat Ale"
+    "BA stout" = "Barrel Aged Stout"
+    "BA Wee Heavy/Tripel" = "Barrel Aged Wee Heavy"
+    "Baltic porter" = "Baltic Porter"
+    "Barel Aged Barleywine" = "Barrel Aged Barleywine"
+    "Barel Aged Stout" = "Barrel Aged Stout"
+    "Barrely Wine" = "Barleywine"
+    "Barely Wine" = "Barleywine"
     "Pis" = "Pilsner"
     "Pils" = "Pilsner"
 }
@@ -75,28 +120,33 @@ function NormalizeState{
 
 }
 
-function NormalizeBrewer{
-    param (
-             [string]$InputString = ''
-         )
-    [string]$newvalue = $InputString
-    [string]$searchvalue = $ht_brewer[$InputString]
-
-    if ($searchvalue -eq '') {return $InputString} else {return $searchvalue}
-
-}
 
 function NormalizeStyle{
     param (
              [string]$InputString = ''
          )
     [string]$newvalue = $InputString
-    [string]$searchvalue = $ht_style[$InputString]
+    $newvalue = $newvalue -replace 'Barell ', 'Barrel '
+    $newvalue = $newvalue -replace 'Barel', 'Barrel'
+    $newvalue = $newvalue -replace 'Barrle ', 'Barrel '
+    $newvalue = $newvalue -replace 'Barrlel ', 'Barrel '
+    $newvalue = $newvalue -replace 'Barley Wine', 'Barleywine'
+    $newvalue = $newvalue -replace 'Begian', 'Belgian'
+    $newvalue = $newvalue -replace 'Begium', 'Belgian'
+    $newvalue = $newvalue -replace 'Belgain', 'Belgian'
+    $newvalue = $newvalue -replace ' aged', ' Aged'
+    $newvalue = $newvalue -replace ' stout', ' Stout'
+    $newvalue = $newvalue -replace ' ale', ' Ale'
+    [string]$searchvalue = $ht_style[$newvalue]
 
-    if ($searchvalue -eq '') {return $InputString} else {return $searchvalue}
+    if ($searchvalue -eq '') {return $newvalue} else {return $searchvalue}
 
 }
 
 
 #NormalizeState 'TX'
 #NormalizeState 'OK'
+#ExtractVintage -InputKey 'ale 2022'
+#ExtractVintage -InputKey 'ale (2022) test'
+#ExtractVintage -InputKey '2001 ale test'
+#ShortenBrewer '512 Brewing Co'

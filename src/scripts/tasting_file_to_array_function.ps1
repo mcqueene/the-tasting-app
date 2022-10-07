@@ -1,5 +1,7 @@
 ﻿#ConvertFrom-Csv -Header "Date","Beer","Stated Style","Container","Taste","Style","Overall Score","Brewer","City","State/Country","Comments","ABV","Org Gravity","IBU" |   
 
+#20220730 mrm added new brewerybeer key and call to new normalize function
+
 . 'C:\Users\matt\OneDrive\Beer Club\normalize_data_functions.ps1'
 
 function TastingFileToArray{
@@ -21,6 +23,12 @@ function TastingFileToArray{
     foreach($row in $input_master_file) {
         [int]$id = $RowCount
         [string]$Beer = $row.Beer
+        [string]$Vintage = ''
+        $Vintage = ExtractVintage -InputKey $Beer
+        if($Vintage -ne '') {
+            $Beer = $Beer -replace $Vintage, ''
+            $Beer = $Beer -replace '\(\)', ''
+        }
         $Beer = $Beer.Trim()
         [string]$DateTasted = ''
         if($row.Date -as [double]) {
@@ -99,7 +107,10 @@ function TastingFileToArray{
         [string]$IBU = $row.IBU
         [string]$OrgGravity = $row."Org Gravity"
         [string]$key = $Beer + $DateTasted
-        $key = $key -replace '[^a-zA-Z0-9]', ''
+        [string]$shortbrewername = ShortenBrewer -InputString $Brewer
+        [string]$keyBeerBrewer = $Beer + $shortbrewername
+        $key = NormalizeKey -InputKey $key
+        $keyBeerBrewer = NormalizeKey -InputKey $keyBeerBrewer
         #$key = $key -replace '\W', ''
     
         $obj = new-object PSObject
@@ -117,8 +128,10 @@ function TastingFileToArray{
         $obj | add-member -membertype NoteProperty -name "Container" -Value $Container
         $obj | add-member -membertype NoteProperty -name "IBU" -Value $IBU
         $obj | add-member -membertype NoteProperty -name "OrgGravity" -Value $OrgGravity
+        $obj | add-member -membertype NoteProperty -name "Vintage" -Value $Vintage
         $obj | add-member -membertype NoteProperty -name "id" -Value $id
         $obj | add-member -membertype NoteProperty -name "key" -Value $key
+        $obj | add-member -membertype NoteProperty -name "keyBeerBrewer" -Value $keyBeerBrewer
 
         $newarray += $obj
         $RowCount++
