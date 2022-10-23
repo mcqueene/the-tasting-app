@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useRef } from 'react';
 // npm run deploy
 //import inputMasterFile from './data/btg_master_list_20211003.json'
 //import inputMasterFile from 'https://github.com/mcqueene/the-tasting-app/blob/e4dd46ce51731314a8ec3c0d2d7a3f1db4e48704/btg_master_list_20211003.json'
@@ -26,7 +26,11 @@ const App = (props) => {
   const [stateCountryFilterValue, setstateCountryFilterValue] = React.useState('');
   const [updatedOn, setupdatedOn] = React.useState('');
   const [totalCount, settotalCount] = React.useState(0);
-
+  const [inputFocus, setinputFocus] = React.useState('');
+  const refBeerName = useRef(null);
+  const refBrewer = useRef(null);
+  const refStateCountry = useRef(null);
+ 
   //used to track when the user object if finally loaded
   React.useEffect(() => {
     loadMasterList()
@@ -65,7 +69,6 @@ const App = (props) => {
 
 
   const onPageSizeChangeEvent = (e) => {
-    console.log("onPageSizeChangeEvent", e)
     setpageSize(e);
   }
 
@@ -89,16 +92,34 @@ const App = (props) => {
   const onBeerNameFilterChange = (event) => {
     const newValue = event.target.value;
     setbeerNameFilterValue(newValue);
+    setinputFocus('beername');
   };
   const onBrewerFilterChange = (event) => {
     const newValue = event.target.value;
     setbrewerFilterValue(newValue);
+    setinputFocus('brewer');
   };
   const onStateCountryFilterChange = (event) => {
     const newValue = event.target.value;
     setstateCountryFilterValue(newValue);
+    setinputFocus('statecountry');
   };
 
+  const onClearFilterClick = () => {
+    setbeerNameFilterValue(''); 
+    setbrewerFilterValue(''); 
+    setstateCountryFilterValue('');
+    if(inputFocus === 'beername') {
+      refBeerName.current.focus();
+    }
+    if(inputFocus === 'brewer') {
+      refBrewer.current.focus();
+    }
+    if(inputFocus === 'statecountry') {
+      refStateCountry.current.focus();
+    }
+
+  }
   const MyExportButton = () => {
     return (
       <GridToolbarContainer>
@@ -204,7 +225,8 @@ const App = (props) => {
             <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
               <TextField
                 required
-                id="outlined-required"
+                id="inBeerName"
+                inputRef={refBeerName}
                 label="Beer Name Filter"
                 variant="outlined"
                 onChange={onBeerNameFilterChange}
@@ -212,7 +234,8 @@ const App = (props) => {
               />
               <TextField
                 required
-                id="outlined-required"
+                id="inBrewer"
+                inputRef={refBrewer}
                 label="Brewer Filter"
                 variant="outlined"
                 onChange={onBrewerFilterChange}
@@ -220,7 +243,8 @@ const App = (props) => {
               />
               <TextField
                 required
-                id="outlined-required"
+                id="inStateCountry"
+                inputRef={refStateCountry}
                 label="State/Country"
                 variant="outlined"
                 onChange={onStateCountryFilterChange}
@@ -229,7 +253,7 @@ const App = (props) => {
             </Stack>
             <Stack direction="row" sx={{p: 1}} spacing={2} alignItems="center" justifyContent="center">
               <Button
-                onClick={() => { setbeerNameFilterValue(''); setbrewerFilterValue(''); setstateCountryFilterValue(''); }}
+                onClick={onClearFilterClick}
                 variant="contained">Clear Filters
               </Button>
             </Stack>
