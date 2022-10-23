@@ -287,6 +287,7 @@ const App = (props) => {
         </div>
 
       </Box>
+      <Typography align="center" variant="subtitle2">Last updated 10/23/2022</Typography>
     </Paper>
 
   );
