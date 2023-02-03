@@ -9,9 +9,11 @@ cd 'C:\Users\matt\OneDrive\Beer Club'
 #$ht_source = @{}
 #$newmasterlist | % {$ht_source[$_.key] = $_.DateTasted}
 
+$tg_beer_list_json | Out-File -Force -Encoding ASCII 'c:\users\matt\OneDrive\Beer Club\tg_tap_list.json'
 
 $json_objs = $tg_beer_list_json | ConvertFrom-Json
 [array]$notfound = $null
+[array]$justtapped = $null
 
 foreach($beer in $json_objs) {
     $tapnumber = $beer.MenuItemDisplayDetail.DisplayName
@@ -29,6 +31,7 @@ foreach($beer in $json_objs) {
     $key = NormalizeKey -InputKey $beername
     [string]$shortbrewername = ShortenBrewer -InputString $brewery
     $keyBeerBrewer = NormalizeKey -InputKey ($beername + $shortbrewername)
+    #Write-Host $beer
     #Write-Host $tapnumber $dayson $beername $brewery $brewerylocation $beveragetype $shortbrewername $keyBeerBrewer
 
     if($beveragetype -eq 'Beer'){
@@ -56,11 +59,16 @@ foreach($beer in $json_objs) {
             $obj | add-member -membertype NoteProperty -name "Year" -Value $year
             $obj | add-member -membertype NoteProperty -name "DateKegged" -Value $dateon
             $obj | add-member -membertype NoteProperty -name "Active" -Value $active
+            $obj | add-member -membertype NoteProperty -name "DaysOnTop" -Value $dayson
 
             $notfound += $obj
+            if($dayson -le 2) {
+                $justtapped += $obj
+            }
         }
     }
 }
 
 $notfound | Export-Csv -Path 'TG_NotFound_List.csv' -NoTypeInformation
 $notfound | Export-Excel -Path 'TG_NotFound_List.xlsx'
+$justtappedk | Export-Excel -Path 'TG_JustTapped_List.xlsx'

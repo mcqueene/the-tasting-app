@@ -86,12 +86,22 @@ function AddCategory{
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Lodging'
         $match = 'y'
     }
+    if( ($desc -match 'avis') -or ($desc -match 'hertz')) {
+        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Travel'
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Transportation'
+        $match = 'y'
+    }
+    if( ($desc -match 'Falmouth') -or ($desc -match 'expediaarp') -or ($desc -match 'hannaford') -or ($desc -match 'glastonbury ct') -or ($desc -match 'dfw inter air') -or ($desc -match 'black dog') -or  ($desc -match 'Patriot Party') -or ($desc -match 'logan airport') -or ($desc -match 'allagash') -or ($desc -match 'throwback') -or ($desc -match 'fore street') -or ($desc -match 'tuckaway') -or ($desc -match 'Island queen') -or ($desc -match 'savannah') ) {
+        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Travel' -Force
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Misc' -Force
+        $match = 'y'
+    }
     if( ($desc -match 'steam games')) {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Entertainment'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Games'
         $match = 'y'
     }
-    if(($desc -match 'chick-fil-a') -or ($desc -match 'Bavarian Grill') -or ($desc -match 'killa pie')) {
+    if(($desc -match 'chick-fil-a')  -or ($desc -match 'panera bread') -or ($desc -match 'kellys craft tavern')  -or ($desc -match 'Bavarian Grill') -or ($desc -match 'tender smoke') -or ($desc -match 'bundt') -or ($desc -match 'killa pie')) {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Entertainment'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Food'
         $match = 'y'
@@ -122,7 +132,7 @@ function AddCategory{
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Internet'
         $match = 'y'
     }
-    if( ($desc -match 'netflix') -or ($desc -match 'youtube') -or ($desc -match 'disney plus')) {
+    if( ($desc -match 'netflix') -or ($desc -match 'youtube') -or ($desc -match 'membership fee')  -or ($desc -match 'disney plus') -or ($desc -match 'comcast')) {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Util'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'TV'
         $match = 'y'
@@ -142,14 +152,14 @@ function AddCategory{
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Home'
         $match = 'y'
     }
-    if( ($desc -match 'the gents place') ) {
-        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Lifestyle'
-        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Hair'
-        $match = 'y'
-    }
-    if( ($desc -match 'Adobe') -or ($desc -match 'Backblaze') -or ($desc -match 'Zwift') -or ($desc -match 'pandora') ) {
+    if( ($desc -match 'Adobe') -or ($desc -match 'Backblaze') -or ($desc -match 'Zwift') -or ($desc -match 'pandora') -or ($desc -match 'myfitnesspal') ) {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Services'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Software'
+        $match = 'y'
+    }
+    if( ($desc -match 'the gents place') -or ($desc -match 'droz') -or ($desc -match 'ultasalonco')  -or ($desc -match 'deluxe nail')) {
+        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Lifestyle'
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Beauty'
         $match = 'y'
     }
     if($desc -match "Dick's Sporting Good") {
@@ -158,12 +168,12 @@ function AddCategory{
         $match = 'y'
     }
 
-    if( ($desc -match 'LL Bean') -or ($desc -match 'fleet feet') -or ($desc -match 'jockey com')  ) {
+    if( ($desc -match 'LL Bean') -or ($desc -match 'fleet feet') -or ($desc -match 'jockey com') -or ($desc -match 'macy s') -or ($desc -match 'jcpenney') -or ($desc -match 'dsw') ) {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Lifestyle'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Clothing'
         $match = 'y'
     }
-    if(($desc -match 'Lodge') -or ($desc -match 'Madeincook') -or ($desc -match 'Williams-Sonoma') -or ($desc -match 'Premier grilling')) {
+    if(($desc -match 'Lodge') -or ($desc -match 'Madeincook') -or ($desc -match 'Williams-Sonoma') -or ($desc -match 'misen') -or ($desc -match 'Premier grilling')) {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Lifestyle'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Cooking'
         $match = 'y'
@@ -173,14 +183,14 @@ function AddCategory{
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Dental'
         $match = 'y'
     }
-    if( ($desc -match 'USMD') -or ($desc -match 'texas radiology') -or ($desc -match 'Texas Health') -or ($desc -match 'Careflite') -or ($desc -match 'OrthoTexas') -or ($desc -match 'Diagnostex') -or ($desc -match 'health texas') ) {
+    if($desc -match 'myeyedr') {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Medical'
-        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Health'
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Vision'
         $match = 'y'
     }
-    if($desc -match 'American Express Bill Payment') {
-        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Payment'
-        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Credit'
+    if( ($desc -match 'USMD') -or ($desc -match 'mcguiness') -or ($desc -match 'drug crafters') -or ($desc -match 'texas radiology') -or ($desc -match 'digestive diseas') -or ($desc -match 'logixhealth') -or ($desc -match 'Texas Health') -or ($desc -match 'Careflite') -or ($desc -match 'OrthoTexas') -or ($desc -match 'Diagnostex') -or ($desc -match 'health texas')  -or ($desc -match 'bswhealth') -or ($desc -match 'centennial primary') -or ($desc -match 'orthopedic') -or ($desc -match 'heartplace') ) {
+        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Medical'
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Health'
         $match = 'y'
     }
     if($desc -match 'Beginning balance') {
@@ -193,9 +203,14 @@ function AddCategory{
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Interest'
         $match = 'y'
     }
-    if($desc -match 'Electronic Payment') {
+    if( ($desc -match 'Electronic Payment') -or ($desc -match 'online payment, thank you') -or ($desc -match 'American Express Bill Payment') ) {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Credit Card'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Payment'
+        $match = 'y'
+    }
+    if( ($desc -match 'your cash reward') ) {
+        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Credit Card'
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Reward'
         $match = 'y'
     }
     if( ($desc -match 'scheduled transfer') -or ($desc -match 'DES:TRANSFER') -or ($desc -match 'DES:EFT') -or ($desc -match 'online banking transfer') ) {
@@ -213,7 +228,12 @@ function AddCategory{
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Federal'
         $match = 'y'
     }
-    if( ($desc -match 'tom thumb') -or ($desc -match 'sweetmarias') -or ($desc -match 'market street') -or ($desc -match 'sprouts farmers') -or ($desc -match 'kroger')) {
+    if( ($desc -match 'MMA Foundation') -or ($desc -match 'susangkomen') ) {
+        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Taxes'
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Charity'
+        $match = 'y'
+    }
+    if( ($desc -match 'tom thumb') -or ($desc -match 'gs cookies') -or ($desc -match 'sees candy') -or ($desc -match 'girl scout cookies') -or ($desc -match 'sweetmarias') -or ($desc -match 'market street') -or ($desc -match 'sprouts farmers') -or ($desc -match 'kroger')) {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Home'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Food'
         $match = 'y'
@@ -223,12 +243,18 @@ function AddCategory{
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Insurance'
         $match = 'y'
    }
-    if($desc -match "Lindy's Lawns") {
+    if( ($desc -match 'nebraska f') -or ($desc -match 'varidesk') -or ($desc -match 'homegoods') -or ($desc -match 'bed bath') -or ($desc -match 'tom bihn') ) {
+        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Home'
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Interior'
+        $match = 'y'
+   }
+    if( ($desc -match "Lindy's Lawns") -or ($desc -match "Frisco Lawn") ) {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Home'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Landscape'
         $match = 'y'
    }
-    if( ($desc -match 'cvs') -or ($desc -match 'walmart.com')) {
+    if( ($desc -match 'cvs') -or ($desc -match 'ace hdwe') -or ($desc -match 'ups store') -or ($desc -match 'caremark') -or ($desc -match 'famous in oregon') -or ($desc -match 'walmart.com') -or ($desc -match 'wal-mart')  -or ($desc -match 'wm supercenter') -or ($desc -match 'bestbuyco') -or ($desc -match 'usps')) {
+        
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Home'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Misc'
         $match = 'y'
@@ -238,27 +264,38 @@ function AddCategory{
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'HOA'
         $match = 'y'
    }
-    if($desc -match 'bestbuyco') {
-        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Home'
-        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Misc'
-        $match = 'y'
-   }
     if($desc -match "lowe's") {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Home'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Maintenance'
         $match = 'y'
    }
-   if( ($desc -match 'austin home') -or ($desc -match 'austin home')) {
+   if($desc -match "concept2") {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Home'
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Fitness'
+        $match = 'y'
+   }
+   if( ($desc -match 'austin home') -or ($desc -match 'cotton weeds quilt')  -or ($desc -match 'stitches')  -or ($desc -match 'rebsfabstas') -or ($desc -match 'quilt') -or ($desc -match 'joann') -or ($desc -match 'fwfabric') -or ($desc -match 'fw fabric') -or ($desc -match 'fatqtrshop') -or ($desc -match 'fabric com') -or ($desc -match 'hancockfabr')  -or ($desc -match 'quilt it')  -or ($desc -match 'fabric.com') -or ($desc -match 'stiched with love') -or ($desc -match 'stitched with love')  -or ($desc -match 'quiltasylum') -or ($desc -match 'box car') ) {
+        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Personal'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Hobbies'
         $match = 'y'
     }
+   if( ($desc -match "etsy") -or ($desc -match "flowrshp") -or ($desc -match "the knot registry") -or ($desc -match "kringle") -or ($desc -match "tiff's") -or ($desc -match "rogers") -or ($desc -match "lynch creek farm") -or ($desc -match "stonewall kitchen") -or ($desc -match "flowers")) {
+        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Personal'
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Gifts'
+        $match = 'y'
+   }
+   if( ($desc -match "amzn digital") -or ($desc -match "amzn.com/bill") ) {
+        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Personal'
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Books'
+        $match = 'y'
+   }
+
     if( ($desc -match 'what a great dog') -or ($desc -match 'every dogs day') ) {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Pets'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Care'
         $match = 'y'
     }
-    if( ($desc -match 'total care animal') ) {
+    if( ($desc -match 'total care animal') -or ($desc -match 'compassionate care')  -or ($desc -match 'compassiona') ) {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Pets'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Medical'
         $match = 'y'
@@ -289,6 +326,16 @@ function AddCategory{
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Random Check'
         $match = 'y'
     }
+    if( ($desc -match 'moneyline id') -and ($match -eq 'n')) {
+        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Bank'
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Payment'
+        $match = 'y'
+    }
+    if( ($desc -match 'vain treas') -and ($match -eq 'n')) {
+        $obj | add-member -membertype NoteProperty -name "Category" -Value 'Bank'
+        $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Deposit'
+        $match = 'y'
+    }
     if($match -eq 'n') {
         $obj | add-member -membertype NoteProperty -name "Category" -Value 'Unknown'
         $obj | add-member -membertype NoteProperty -name "SubCategory" -Value 'Unknown'
@@ -316,6 +363,7 @@ foreach($file in $filelist) {
             $obj | add-member -membertype NoteProperty -name "Desc" -Value $row.Description
             $obj | add-member -membertype NoteProperty -name "Amount" -Value $row.Amount
             $obj | add-member -membertype NoteProperty -name "Year" -Value  (GetYear -Date $row.Date)
+            $obj | add-member -membertype NoteProperty -name "Source" -Value 'boa'
             $obj = AddCategory -obj $obj -desc $row.Description
             $mergearray += $obj
         }
@@ -338,6 +386,7 @@ foreach($file in $filelist) {
                 $obj | add-member -membertype NoteProperty -name "Amount" -Value $row.Debit
             }
             $obj | add-member -membertype NoteProperty -name "Year" -Value  (GetYear -Date $row.Date)
+            $obj | add-member -membertype NoteProperty -name "Source" -Value '7861'
             $obj = AddCategory -obj $obj -desc $row.Description
             $mergearray += $obj
         }
@@ -361,6 +410,7 @@ foreach($file in $filelist) {
                 $obj | add-member -membertype NoteProperty -name "Amount" -Value $d      
             }
             $obj | add-member -membertype NoteProperty -name "Year" -Value  (GetYear -Date $row.Date)
+            $obj | add-member -membertype NoteProperty -name "Source" -Value '8676'
             $obj = AddCategory -obj $obj -desc $row.Description
            #Write-Host $obj
             $mergearray += $obj
@@ -377,6 +427,7 @@ foreach($file in $filelist) {
             $obj | add-member -membertype NoteProperty -name "Desc" -Value $row.Description
             $obj | add-member -membertype NoteProperty -name "Amount" -Value $row.Amount
             $obj | add-member -membertype NoteProperty -name "Year" -Value  (GetYear -Date $row.Date)
+            $obj | add-member -membertype NoteProperty -name "Source" -Value 'amex'
             $obj = AddCategory -obj $obj -desc $row.Description
             $mergearray += $obj
         }
@@ -384,10 +435,13 @@ foreach($file in $filelist) {
 }
 $missing = $mergearray | Where-Object -Property Category -eq 'unknown'
 foreach($x in $missing) {
-    Write-Host $x.Date $x.Amount $x.Desc $x.Year $x.Category $x.Subcategory
+    Write-Host $x.Date $x.Amount $x.Desc $x.Year $x.Source $x.Category $x.Subcategory
     if($x.Category -eq 'unknown') {
         #Write-Host $x.Date $x.Amount $x.Desc $x.Year $x.Category $x.Subcategory
     }
 }
 Write-Host 'total' $missing.Count
+
+$mergearray | Export-Excel -Path 'C:\Users\matt\OneDrive\statements\combined_statements.xlsx'
+
 
