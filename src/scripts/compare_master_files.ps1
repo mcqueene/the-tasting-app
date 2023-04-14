@@ -1,39 +1,53 @@
 ﻿. 'C:\Users\matt\OneDrive\Beer Club\tasting_file_to_array_function.ps1'
 cd 'C:\Users\matt\OneDrive\Beer Club'
 
-
-. 'C:\Users\matt\OneDrive\Beer Club\tasting_file_to_array_function.ps1'
-cd 'C:\Users\matt\OneDrive\Beer Club'
 $comparefile = Import-Excel -Path 'Tasting List Master from doug.xlsx' -WorksheetName "Beverages" -Raw
 [array]$comparearray = $null
-$comparearray = TastingFileToArray -File $comparefile 
+$comparearray = TastingFileToArray -File $comparefile -RowCount 2
+
 $ht_copy = @{}
 $comparearray | % {$ht_copy[$_.key] = $_.DateTasted}
-$ht_copy.Count
 
-$sourcefile = Import-Excel -Path 'Tasting List Master copy 202110.xlsx' -WorksheetName "Beer" -Raw
-[array]$sourcearray = $null
-$sourcearray = TastingFileToArray -File $sourcefile 
+[array]$sourcearray = Import-Excel -Path 'NewCombinedList.xlsx' -Raw
 $ht_source = @{}
-$sourcearray | % {$ht_source[$_.key] = $_.id}
-$ht_source.Count
+$sourcearray | % {$ht_source[$_.key] = $_.DateTasted}
+
+
+Write-Host 'source ht=' $ht_source.Count 'copy ht=' $ht_copy.Count
 
 $ht_missing = @{}
 $ht_copy.GetEnumerator() |
     ForEach-Object {
         $find = $ht_source[$_.Key]
-        if($find -eq $nul) {
-            Write-Host 'failed to find key' $_.Key 'value of' $_.Value
+        if($find -eq $null) {
+            #Write-Host 'failed to find key' $_.Key 'value of' $_.Value
             $ht_missing.Add($_.Key, $_.Value)
         }   
     }
 
-PSCustomObject]$ht_missing | Export-Csv -Path "missing_report2.csv" -NoTypeInformation
+#[PSCustomObject]$ht_missing | Export-Csv -Path "missing_report2.csv" -NoTypeInformation
+#$ht_missing | ConvertTo-Json -depth 100 | Out-File "missing_report2.csv"
+$ht_missing.GetEnumerator() | Select-Object -Property Key,Value | Export-Csv -NoTypeInformation -Path "missing_report2.csv"
+
+Write-Host 'source=' $ht_source.Count 'copy=' $ht_copy.Count 'missing=' $ht_missing.Count
+
+$ht_missing.Values | Group-Object | Where-Object -Property Count -gt 2 | Sort-Object Count -Descending | Select-Object -First 10
+$ht_missing.Values | Group-Object | Where-Object -Property Count -gt 2 | Sort-Object Name -Descending | Select-Object -First 10
 
 <#
+$b = "BishopsBarrel"
+$d = "20210113"
+$k = 'TheFear20181118'
+#$sourcearray | Where-Object {($_.key -Match $b)}  | Select-Object DateTasted, Beer, Key | Sort-Object DateTasted | Format-Table
+#$comparearray | Where-Object {($_.key -Match $b)}  | Select-Object DateTasted, Beer, Key | Sort-Object DateTasted | Format-Table
+$sourcearray | Where-Object {($_.DateTasted -Match $d)}  | Select-Object Beer, DateTasted, Key | Sort-Object Beer |Format-Table
+$comparearray | Where-Object {($_.DateTasted -Match $d)}  | Select-Object Beer, DateTasted, Key | Sort-Object Beer | Format-Table
+$ht_source[$k] -eq $null
+$ht_missing.Values | Group-Object | Where-Object -Property Count -gt 2 | Sort-Object Count -Descending | Select-Object -First 5
+#>
 
 
-
+<#
 $comparefile = Import-Excel -Path 'Tasting List Master from doug.xlsx' -WorksheetName "Beverages" -Raw
 [array]$comparearray = $null
 
@@ -64,8 +78,8 @@ $missingarray | Export-Csv -Path "missing_report.csv" -NoTypeInformation
 <#
 $b = "Augustiner"
 $d = "20000506"
-$myfile | Where-Object {($_.Beer -Match $b)}  | Sort-Object Beer |Format-Table
-$myfile | Where-Object {($_.DateTasted -Match $d)}  | Sort-Object Beer |Format-Table
+$sourcearray | Where-Object {($_.Beer -Match $b)}  | Sort-Object Beer |Format-Table
+$sourcearray | Where-Object {($_.DateTasted -Match $d)}  | Sort-Object Beer |Format-Table
 $comparearray | Where-Object {($_.DateTasted -Match $d)}  | Sort-Object Beer | Format-Table
 
 

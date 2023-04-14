@@ -23,6 +23,16 @@ function ShortenBrewer{
     return $newvalue
 }
 
+function NormalizeBrewer{
+    param (
+             [string]$InputString = ''
+         )
+    [string]$newvalue = $InputString
+    $newvalue = $newvalue -replace 'Brewing Co','Brewing Company'
+    $newvalue = $newvalue -replace 'Brewing Co.','Brewing Company'
+    $newvalue = $newvalue -replace 'Brewing','Brewing Company'
+    return $newvalue
+}
 
 
 function ExtractVintage {
