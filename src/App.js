@@ -38,7 +38,7 @@ const App = (props) => {
 
   React.useEffect(() => {
     const applyFilters = (beerName, brewerName, stateCountry) => {
-      let newArray = [];
+      let newArray = [...inputMasterFile];
       if (beerName.length !== 0) {
         newArray = inputMasterFile.filter((obj) => obj.Beer.toUpperCase().includes(beerName.toUpperCase()));
         if (brewerName.length !== 0) {
@@ -210,6 +210,20 @@ const App = (props) => {
       headerName: 'Comments',
       width: 250,
       editable: false,
+    },
+    {
+      field: 'IBU',
+      headerName: 'IBU',
+      width: 100,
+      editable: false,
+      sortable: false,
+    },
+    {
+      field: 'OrgGravity',
+      headerName: 'OrgGravity',
+      width: 100,
+      editable: false,
+      sortable: false,
     },
   ];
 
