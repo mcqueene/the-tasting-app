@@ -70,7 +70,11 @@ foreach($beer in $json_objs) {
 }
 
 $notfound | Export-Csv -Path 'TG_NotFound_List.csv' -NoTypeInformation
-$notfound | Export-Excel -Path 'TG_NotFound_List.xlsx'
+
+Remove-Item -Path 'TG_NotFound_List.xlsx'  -Force
+Remove-Item -Path 'TG_JustTapped_List.xlsx'  -Force
+
+$notfound | Export-Excel -Path 'TG_NotFound_List.xlsx' 
 $justtapped | Export-Excel -Path 'TG_JustTapped_List.xlsx'
 
 $justtapped
