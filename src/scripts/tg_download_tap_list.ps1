@@ -31,13 +31,13 @@ foreach($beer in $json_objs) {
     $key = NormalizeKey -InputKey $beername
     [string]$shortbrewername = ShortenBrewer -InputString $brewery
     $keyBeerBrewer = NormalizeKey -InputKey ($beername + $shortbrewername)
-    #Write-Host $beer
+    Write-Host $beveragetype $beername $keyBeerBrewer
     #Write-Host $tapnumber $dayson $beername $brewery $brewerylocation $beveragetype $shortbrewername $keyBeerBrewer
 
     if($beveragetype -eq 'Beer'){
         #[array]$foundlist = $newmasterlist | Where-Object Beer -Match $beername
         #[array]$foundlist = $newmasterlist | Where-Object key -Match $key
-        
+        Write-Host 'searching' $beername $brewery $shortbrewername $keyBeerBrewer
         [array]$foundlist = $newmasterlist | Where-Object keyBeerBrewer -Match $keyBeerBrewer
 
         #$find = $ht_source[$key]
