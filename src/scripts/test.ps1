@@ -55,7 +55,7 @@ foreach($beer in $json_objs) {
     $key = NormalizeKey -InputKey $beername
     [string]$shortbrewername = ShortenBrewer -InputString $brewery
     $keyBeerBrewer = NormalizeKey -InputKey ($beername + $shortbrewername)
-    Write-Host $beer $beer.Id $beer.Active $beer.DatePutOn
+    #Write-Host $beer $beer.Id $beer.Active $beer.DatePutOn
     Write-Host $beveragetype $beername $keyBeerBrewer
     #$beer.GetType()
 }
