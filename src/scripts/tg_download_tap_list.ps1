@@ -1,6 +1,8 @@
-﻿. 'C:\Users\matt\OneDrive\Beer Club\normalize_data_functions.ps1'
+﻿#. 'C:\Users\matt\OneDrive\Beer Club\normalize_data_functions.ps1'
+. .\src\scripts\normalize_data_functions.ps1
 
 #20220730 mrm added normalize functions to use new brewerybeer key
+#20240114 mrm update path to shared function files
 
 cd 'C:\Users\matt\OneDrive\Beer Club'
 [string]$tg_beer_list_json = Invoke-WebRequest -Uri  https://server.digitalpour.com/DashboardServer/api/v3/MenuItems/56ba39265e002c0c8446de27/1/Tap?apiKey=56ba38b25e002c0d38510298 

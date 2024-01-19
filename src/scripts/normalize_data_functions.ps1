@@ -1,21 +1,21 @@
-﻿<#
+﻿
+# 20240114 mrm fixed normalizebrewer to only replace at end of string with \s*$
 
+<#
 '2020 matt' -replace "^([2][0][012][0-9])", '**'
 $found = '2021 matt' -match '^([2][0][012][0-9])'
 if ($found) {
     $matches[1]
 }
-
 '2021 matt brewing CO' -match 'co$'
 '2021 matt brewing COmpany' -match 'co$'
-
 #>
 function ShortenBrewer{
     param (
              [string]$InputString = ''
          )
     [string]$newvalue = $InputString
-    $newvalue = $newvalue -replace 'Brewing Company',''
+    $newvalue = $newvalue -replace 'Brewing Company','' 
     $newvalue = $newvalue -replace 'Brewing Co',''
     $newvalue = $newvalue -replace 'Brewing Co.',''
     $newvalue = $newvalue -replace 'Brewing',''
@@ -28,9 +28,10 @@ function NormalizeBrewer{
              [string]$InputString = ''
          )
     [string]$newvalue = $InputString
-    $newvalue = $newvalue -replace 'Brewing Co','Brewing Company'
-    $newvalue = $newvalue -replace 'Brewing Co.','Brewing Company'
-    $newvalue = $newvalue -replace 'Brewing','Brewing Company'
+    $newvalue = $newvalue -replace "Brewing Co.\s*$","Brewing Company"
+    $newvalue = $newvalue -replace 'Brewing Co\s*$','Brewing Company'
+    $newvalue = $newvalue -replace 'Brewing\s*$','Brewing Company'
+    #Write-Host -ForegroundColor Yellow '3normalizebrewer input='$InputString ' newvalue='$newvalue
     return $newvalue
 }
 
@@ -47,10 +48,10 @@ function ExtractVintage {
 
 
 $ht_state = @{
-    “CA” = “California”
-    "KS" = "Kansas"
-    "OK" = "Oklahoma"
-    “TX” = “Texas”
+    “California” = “CA”
+    "Kanas" = "KS"
+    "Oklahoma" = "OK"
+    “Texas” = “TX”
 }
 
 $ht_style = @{
@@ -154,6 +155,7 @@ function NormalizeStyle{
 }
 
 
+#NormalizeState 'Texas'
 #NormalizeState 'TX'
 #NormalizeState 'OK'
 #ExtractVintage -InputKey 'ale 2022'

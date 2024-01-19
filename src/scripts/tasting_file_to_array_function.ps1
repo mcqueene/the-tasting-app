@@ -1,8 +1,10 @@
 ﻿#ConvertFrom-Csv -Header "Date","Beer","Stated Style","Container","Taste","Style","Overall Score","Brewer","City","State/Country","Comments","ABV","Org Gravity","IBU" |   
 
 #20220730 mrm added new brewerybeer key and call to new normalize function
+#20240114 mrm update path to shared function files
 
-. 'C:\Users\matt\OneDrive\Beer Club\normalize_data_functions.ps1'
+#. 'C:\Users\matt\OneDrive\Beer Club\normalize_data_functions.ps1'
+. .\src\scripts\normalize_data_functions.ps1
 
 function TastingFileToArray{
     param (
@@ -80,7 +82,9 @@ function TastingFileToArray{
         }
         [string]$Brewer = $row.Brewer
         $Brewer = $Brewer.Trim()
-        $Brewer = NormalizeBrewer -InputString $Brewer
+        #Write-Host -ForegroundColor Cyan 'original brewer='$row.Brewer
+        [string]$s_Brewer = NormalizeBrewer -InputString $Brewer
+        #Write-Host -ForegroundColor Green 'brewer='$Brewer 's_Brewer='$s_Brewer
         
         [string]$City = $row.City
         $City = $City.Trim()
@@ -107,7 +111,7 @@ function TastingFileToArray{
         [string]$IBU = $row.IBU
         [string]$OrgGravity = $row."Org Gravity"
         [string]$key = $Beer + $DateTasted
-        [string]$shortbrewername = ShortenBrewer -InputString $Brewer
+        [string]$shortbrewername = ShortenBrewer -InputString $s_Brewer
         [string]$keyBeerBrewer = $Beer + $shortbrewername
         $key = NormalizeKey -InputKey $key
         $keyBeerBrewer = NormalizeKey -InputKey $keyBeerBrewer
@@ -121,7 +125,7 @@ function TastingFileToArray{
         $obj | add-member -membertype NoteProperty -name "Taste" -Value $Taste
         $obj | add-member -membertype NoteProperty -name "Style" -Value $Style
         $obj | add-member -membertype NoteProperty -name "OverallScore" -Value $OverallScore
-        $obj | add-member -membertype NoteProperty -name "Brewer" -Value $Brewer
+        $obj | add-member -membertype NoteProperty -name "Brewer" -Value $s_Brewer
         $obj | add-member -membertype NoteProperty -name "City" -Value $City
         $obj | add-member -membertype NoteProperty -name "StateCountry" -Value $StateCountry
         $obj | add-member -membertype NoteProperty -name "Comments" -Value $Comments
@@ -137,7 +141,6 @@ function TastingFileToArray{
         $RowCount++
     }
 
-    Write-Host 'finished array count' $newarray.Length 'file' $FileName
+    Write-Host '--- finished array count' $newarray.Length 'file' $FileName
     $newarray
-
 }

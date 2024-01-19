@@ -1,4 +1,5 @@
-﻿. 'C:\Users\matt\OneDrive\Beer Club\tasting_file_to_array_function.ps1'
+﻿. .\src\scripts\tasting_file_to_array_function.ps1 -Verbose
+
 cd 'C:\Users\matt\OneDrive\Beer Club'
 
 [array]$sourcearray = Import-Excel -Path 'NewCombinedList.xlsx' -Raw
