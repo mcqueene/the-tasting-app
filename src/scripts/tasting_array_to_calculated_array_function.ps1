@@ -1,6 +1,7 @@
-. .\src\scripts\normalize_data_functions.ps1
+. 'C:\Users\matt\Documents\GitHub\the-tasting-app\src\scripts\normalize_data_functions.ps1'
 
 #20240114 mrm copied from tasting_file_to_array_function.ps1
+#20240119 mrm changed relative directory to direct path
 
 function Test-DateTimePattern
 {

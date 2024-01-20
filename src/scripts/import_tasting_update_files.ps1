@@ -78,7 +78,7 @@ if($yn_update_files -eq 'y') {
     Copy-Item $fullpath_btg_master_list $fullpath_app_uploadfile
     Write-Host 'updating new combined excel file' $fullpath_new_combined_excel
     Remove-Item -Path $fullpath_new_combined_excel -Force
-    $sortedarray | Export-Excel -Path $fullpath_new_combined_excel 
+    $sortedarray | Export-Excel -Path $fullpath_new_combined_excel -TableName 'MasterBeerList' -TableStyle Medium16 -Show
 } else {
     Write-Host -ForegroundColor Yellow 'skipping update of files'
 }

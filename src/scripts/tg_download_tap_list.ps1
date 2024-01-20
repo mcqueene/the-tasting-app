@@ -1,13 +1,14 @@
 ﻿#. 'C:\Users\matt\OneDrive\Beer Club\normalize_data_functions.ps1'
-. .\src\scripts\normalize_data_functions.ps1
+. 'C:\Users\matt\Documents\GitHub\the-tasting-app\src\scripts\normalize_data_functions.ps1'
 
 #20220730 mrm added normalize functions to use new brewerybeer key
 #20240114 mrm update path to shared function files
+#20240119 mrm added direct path and removed change directory
 
-cd 'C:\Users\matt\OneDrive\Beer Club'
+#cd 'C:\Users\matt\OneDrive\Beer Club'
 [string]$tg_beer_list_json = Invoke-WebRequest -Uri  https://server.digitalpour.com/DashboardServer/api/v3/MenuItems/56ba39265e002c0c8446de27/1/Tap?apiKey=56ba38b25e002c0d38510298 
 
-[array]$newmasterlist = Import-Excel -Path 'NewCombinedList.xlsx' -Raw
+[array]$newmasterlist = Import-Excel -Path 'c:\users\matt\OneDrive\Beer Club\NewCombinedList.xlsx' -Raw
 #$ht_source = @{}
 #$newmasterlist | % {$ht_source[$_.key] = $_.DateTasted}
 
@@ -71,12 +72,12 @@ foreach($beer in $json_objs) {
     }
 }
 
-$notfound | Export-Csv -Path 'TG_NotFound_List.csv' -NoTypeInformation
+#$notfound | Export-Csv -Path 'c:\users\matt\OneDrive\Beer Club\TG_NotFound_List.csv' -NoTypeInformation
 
-Remove-Item -Path 'TG_NotFound_List.xlsx'  -Force
-Remove-Item -Path 'TG_JustTapped_List.xlsx'  -Force
+Remove-Item -Path 'c:\users\matt\OneDrive\Beer Club\TG_NotFound_List.xlsx'  -Force
+Remove-Item -Path 'c:\users\matt\OneDrive\Beer Club\TG_JustTapped_List.xlsx'  -Force
 
-$notfound | Export-Excel -Path 'TG_NotFound_List.xlsx' 
-$justtapped | Export-Excel -Path 'TG_JustTapped_List.xlsx'
+$notfound | Export-Excel -Path 'c:\users\matt\OneDrive\Beer Club\TG_NotFound_List.xlsx' -TableName 'NotFound' -TableStyle Medium16 -Show
+$justtapped | Export-Excel -Path 'c:\users\matt\OneDrive\Beer Club\TG_JustTapped_List.xlsx' -TableName 'JustTapped' -TableStyle Medium16 -Show
 
 $justtapped
