@@ -63,6 +63,8 @@ $sortedarray | Select-Object -First 15 | Format-Table
     Sort-Object MyDate -Unique -Descending   
 $datearray | Select-Object -First 5 
 
+#mrm todo --> need to split out the alt beverages to separate array and put them on separate tab and maybe remove them from json extract
+
 #create new combined
 $combinedjson = $sortedarray |  ConvertTo-Json -Depth 100
 [string]$fullpath_btg_master_list = ($sourcedirupdatefiles + "btg_master_list_combined.json")
