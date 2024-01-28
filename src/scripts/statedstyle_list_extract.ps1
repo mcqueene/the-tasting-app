@@ -12,7 +12,7 @@ $array | Select-Object -First 5
 
 #$sourcearray | Group-Object StatedStyle | Sort-Object Name | Where-Object Count -eq 1 | Select-Object Name, Count, Group.Beer, Group.Brewer, Group.StateCountry, Group.ABV, Group.DateTasted
 [array]$errorlist = @()
-$grouparray = $sourcearray | Group-Object StatedStyle | Sort-Object Name | Where-Object Count -lt 3 
+$grouparray = $sourcearray | Group-Object StatedStyle | Sort-Object Name | Where-Object Count -lt 6 
 foreach($row in $grouparray) {
     [string]$style = $row.Name
     [string]$count = $row.Count
