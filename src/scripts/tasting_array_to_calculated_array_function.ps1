@@ -148,11 +148,11 @@ function TastingArrayToCalculatedArray{
         $obj | add-member -membertype NoteProperty -name "Brewer" -Value $s_Brewer
         $obj | add-member -membertype NoteProperty -name "City" -Value $City
         $obj | add-member -membertype NoteProperty -name "StateCountry" -Value $StateCountry
-        $obj | add-member -membertype NoteProperty -name "Comments" -Value $Comments
         $obj | add-member -membertype NoteProperty -name "Container" -Value $Container
         $obj | add-member -membertype NoteProperty -name "IBU" -Value $IBU
         $obj | add-member -membertype NoteProperty -name "OrgGravity" -Value $OrgGravity
         $obj | add-member -membertype NoteProperty -name "Vintage" -Value $Vintage
+        $obj | add-member -membertype NoteProperty -name "Comments" -Value $Comments
         $obj | add-member -membertype NoteProperty -name "id" -Value $id
         $obj | add-member -membertype NoteProperty -name "key" -Value $key
         $obj | add-member -membertype NoteProperty -name "keyBeerBrewer" -Value $keyBeerBrewer
