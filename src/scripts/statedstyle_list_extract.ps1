@@ -1,5 +1,6 @@
 ﻿#
 # 20240119 mrm added worksheet for error list
+# 20240211 mrm add sheet for unique brewer names
 
 [array]$sourcearray = @()
 $sourcearray = Import-Excel -Path 'C:\Users\matt\OneDrive\Beer Club\NewCombinedList.xlsx' -Raw
@@ -10,6 +11,9 @@ Write-Host 'found' $array.Count 'styles'
 $array | Select-Object -First 5 
 
 #$sourcearray | Group-Object StatedStyle | Sort-Object Name | Where-Object Count -eq 1 | Select-Object Name, Count, Group.Beer, Group.Brewer, Group.StateCountry, Group.ABV, Group.DateTasted
+
+[array]$brewerarray = @()
+$brewerarray = $sourcearray | Where-Object -Property StatedStyle -NotLike 'Other Beverage*' | Group-Object Brewer, City, StateCountry  | Sort-Object Brewer 
 
 [array]$errorlist = @()
 $grouparray = $sourcearray | Where-Object -Property StatedStyle -NotLike 'Other Beverage*' | Group-Object StatedStyle  | Sort-Object Name | Where-Object Count -lt 7 
@@ -36,6 +40,7 @@ Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "Styles" -Column 1 -Widt
 $sourcearray | Group-Object StatedStyle | Sort-Object Name | Select-Object Name, Count | Export-Excel -PassThru -AutoSize -WorksheetName 'StyleCount' -ExcelPackage $excelpkg1 -TableName 'StyleCount' -TableStyle Medium16 
 Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "StyleCount" -Column 1 -Width 30
 $errorlist | Sort-Object Count, Style | Export-Excel -PassThru -AutoSize -WorksheetName 'LowCountStyles' -ExcelPackage $excelpkg1 -TableName 'LowCountStyles' -TableStyle Medium16 
+$brewerarray | Select-Object Name, Count | Export-Excel -PassThru -AutoSize -WorksheetName 'BrewerCount' -ExcelPackage $excelpkg1 -TableName 'BrewerCount' -TableStyle Medium16 
 Close-ExcelPackage -ExcelPackage $excelpkg1 -Show
 
 #Remove-Item 'C:\Users\matt\OneDrive\Beer Club\StatedStyle_Count.xlsx'
