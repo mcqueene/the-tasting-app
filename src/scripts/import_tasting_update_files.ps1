@@ -1,6 +1,7 @@
 . "C:\Users\matt\Documents\GitHub\the-tasting-app\src\scripts\tasting_array_to_calculated_array_function.ps1"
 
 # 20240127 mrm add auto size to export excel 
+# 20240227 mrm add vintage to array that feeds TastingArrayToCalculatedArray, update sort to keyv2
 
 $d_start = get-date
 $datestr = $d_start.ToString("yyyyMMdd")
@@ -21,7 +22,7 @@ if($yn_backup_current_files) {
 [array]$sourcearray = Import-Excel -Path $inputfile_newcombinedlist -Raw 
 [array]$convertedarray = $sourcearray | Select-Object -Property @{name='Date';expression={$_.DateTasted}}, Beer, `
     @{name='Stated Style';expression={$_.'StatedStyle'}}, Container, Taste, Style, @{name='Overall Score ';expression={$_.OverallScore}}, `
-    Brewer, City, @{name='State/Country';expression={$_.StateCountry}}, Comments, ABV, @{name='Org Gravity';expression={$_.OrgGravity}}, IBU
+    Brewer, City, @{name='State/Country';expression={$_.StateCountry}}, Comments, ABV, @{name='Org Gravity';expression={$_.OrgGravity}}, IBU, Vintage
       
 #send old combined list thru the to array function to regenerate the keys
 [array]$newarray = $null
@@ -33,12 +34,14 @@ $updatefilelist = Get-ChildItem -Path "C:\Users\matt\OneDrive\Beer Club\" -Filte
 [int]$expectedrowcount = $newarray.Count
 #loop update files thru array function to generate a merge array
 [array]$mergearray = @()
+[int]$filecount = 0
 foreach($updatefile in $updatefilelist) {
     [array]$filecontents = @()
     [string]$filepath = $sourcedirupdatefiles + $updatefile
     $filecontents = Import-Excel -Path $filepath -Raw
     $expectedrowcount += $filecontents.Count
     $mergearray += TastingArrayToCalculatedArray -InputArray $filecontents -FileName $updatefile
+    $filecount++
 }
 $mergearray | 
     Sort-Object -Property DateTasted -Descending |
@@ -48,11 +51,12 @@ $mergearray |
 [array]$sortedarray = $null
 $sortedarray += $newarray
 $sortedarray += $mergearray
-
+Write-Host 'found' $filecount 'files with' $mergearray.Count 'rows adding to master count' $newarray.Count 'presort count' $sortedarray.Count
 #sort
-$sortedarray = $sortedarray | Sort-Object key -Unique | Sort-Object -Property @{Expression = "DateTasted"; Descending = $true}, @{Expression = "Beer"; Descending = $false}
-if($expectedrowcount -ne $newarray.Length) {
-    Write-Host -ForegroundColor Red "newarray count="$newarray.Length "merge count="$mergearray.Length "expected count="$expectedrowcount "sorted count="$sortedarray.Length
+$sortedarray = $sortedarray | Sort-Object keyv2 -Unique | Sort-Object -Property @{Expression = "DateTasted"; Descending = $true}, @{Expression = "Beer"; Descending = $false}
+if($expectedrowcount -ne $sortedarray.Count) {
+    Write-Host -ForegroundColor Red "newarray count="$newarray.Count "merge count="$mergearray.Count "expected count="$expectedrowcount "sorted count="$sortedarray.Count
+    Exit
 }
 Write-Host 'Process complete - wrapping up'
 $sortedarray | Select-Object -First 15 | Format-Table

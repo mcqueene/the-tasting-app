@@ -2,6 +2,7 @@
 
 #20220730 mrm added new brewerybeer key and call to new normalize function
 #20240114 mrm update path to shared function files
+#20240227 mrm add new keyv2
 
 #. 'C:\Users\matt\OneDrive\Beer Club\normalize_data_functions.ps1'
 . .\src\scripts\normalize_data_functions.ps1
@@ -27,7 +28,7 @@ function TastingFileToArray{
         [string]$Beer = $row.Beer
         [string]$Vintage = ''
         $Vintage = ExtractVintage -InputKey $Beer
-        if($Vintage -ne '') {
+        if($Vintage.Length -eq 0) {
             $Beer = $Beer -replace $Vintage, ''
             $Beer = $Beer -replace '\(\)', ''
         }
@@ -111,10 +112,12 @@ function TastingFileToArray{
         [string]$IBU = $row.IBU
         [string]$OrgGravity = $row."Org Gravity"
         [string]$key = $Beer + $DateTasted
+        [string]$keyv2 = $Beer + $DateTasted + $Vintage        
         [string]$shortbrewername = ShortenBrewer -InputString $s_Brewer
         [string]$keyBeerBrewer = $Beer + $shortbrewername
         $key = NormalizeKey -InputKey $key
         $keyBeerBrewer = NormalizeKey -InputKey $keyBeerBrewer
+        $keyv2 = NormalizeKey -InputKey $keyv2
         #$key = $key -replace '\W', ''
     
         $obj = new-object PSObject
@@ -136,7 +139,8 @@ function TastingFileToArray{
         $obj | add-member -membertype NoteProperty -name "id" -Value $id
         $obj | add-member -membertype NoteProperty -name "key" -Value $key
         $obj | add-member -membertype NoteProperty -name "keyBeerBrewer" -Value $keyBeerBrewer
-
+        $obj | add-member -membertype NoteProperty -name "keyv2" -Value $keyv2
+        
         $newarray += $obj
         $RowCount++
     }

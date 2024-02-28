@@ -2,6 +2,7 @@
 
 #20240114 mrm copied from tasting_file_to_array_function.ps1
 #20240119 mrm changed relative directory to direct path
+#20240227 mrm add vintage to array that feeds TastingArrayToCalculatedArray, add new key
 
 function Test-DateTimePattern
 {
@@ -30,7 +31,7 @@ function TastingArrayToCalculatedArray{
              [string]$FileName = ''
          )
 
-    [array]$filteredarray =  $InputArray | Select-Object "Date","Beer","Stated Style","Container","Taste","Style","Overall Score","Brewer","City","State/Country","Comments","ABV","IBU","Org Gravity"
+    [array]$filteredarray =  $InputArray | Select-Object "Date","Beer","Stated Style","Container","Taste","Style","Overall Score","Brewer","City","State/Country","Comments","ABV","IBU","Org Gravity", "Vintage"
     $filteredarray = $filteredarray | Where-Object {( $null -ne $_.Date) -and ($null -ne $_.Beer ) } 
     if($InputArray.Count -ne $filteredarray.Count) {
         Write-Host -ForegroundColor Red 'inputarray='$InputArray.Count 'filteredarray='$filteredarray.Count
@@ -40,15 +41,16 @@ function TastingArrayToCalculatedArray{
     foreach($row in $filteredarray) {
         [int]$id = $RowCount
         [string]$Beer = $row.Beer
-        [string]$Vintage = ''
-        $Vintage = ExtractVintage -InputKey $Beer
+        [string]$Vintage = $row.Vintage
+        if($Vintage.Length -eq 0) {
+            $Vintage = ExtractVintage -InputKey $Beer
+        }
         if($Vintage -ne '') {
             $Beer = $Beer -replace $Vintage, ''
             $Beer = $Beer -replace '\(\)', ''
         }
         $Beer = $Beer.Trim()
         [string]$DateTasted = ''
-
         if(Test-DateTimePattern -String $row.Date -Pattern 'yyyyMMdd') {
             $DateTasted = [DateTime]::ParseExact($row.Date, 'yyyyMMdd',$null)
         }
@@ -131,10 +133,12 @@ function TastingArrayToCalculatedArray{
         [string]$IBU = $row.IBU
         [string]$OrgGravity = $row."Org Gravity"
         [string]$key = $Beer + $DateTasted
+        [string]$keyv2 = $Beer + $DateTasted + $Vintage
         [string]$shortbrewername = ShortenBrewer -InputString $s_Brewer
         [string]$keyBeerBrewer = $Beer + $shortbrewername
         $key = NormalizeKey -InputKey $key
         $keyBeerBrewer = NormalizeKey -InputKey $keyBeerBrewer
+        $keyv2 = NormalizeKey -InputKey $keyv2
         #$key = $key -replace '\W', ''
     
         $obj = new-object PSObject
@@ -156,6 +160,7 @@ function TastingArrayToCalculatedArray{
         $obj | add-member -membertype NoteProperty -name "id" -Value $id
         $obj | add-member -membertype NoteProperty -name "key" -Value $key
         $obj | add-member -membertype NoteProperty -name "keyBeerBrewer" -Value $keyBeerBrewer
+        $obj | add-member -membertype NoteProperty -name "keyv2" -Value $keyv2
 
         $newarray += $obj
         $RowCount++
