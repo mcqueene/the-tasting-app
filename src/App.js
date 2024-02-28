@@ -132,6 +132,12 @@ const App = (props) => {
   const columns = [
     {
       field: "Beer",
+      valueGetter: ({ row }) => {
+        if (!row.Vintage) {
+          return row.Beer;
+        }
+        return row.Beer || '(' || row.Vintage ||')';
+      },
       headerName: "Beer Name",
       sortable: true,
       width: 290,
@@ -182,6 +188,12 @@ const App = (props) => {
       sortable: false,
     },
     {
+      field: 'Vintage',
+      headerName: 'Vintage',
+      width: 150,
+      editable: false,
+    },
+    {
       field: 'Container',
       headerName: 'Container',
       width: 150,
@@ -196,12 +208,6 @@ const App = (props) => {
     {
       field: 'StateCountry',
       headerName: 'StateCountry',
-      width: 150,
-      editable: false,
-    },
-    {
-      field: 'Vintage',
-      headerName: 'Vintage',
       width: 150,
       editable: false,
     },
