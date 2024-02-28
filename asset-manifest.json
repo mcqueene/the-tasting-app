@@ -1,22 +1,15 @@
 {
   "files": {
-    "main.css": "/the-tasting-app/static/css/main.a617e044.chunk.css",
-    "main.js": "/the-tasting-app/static/js/main.5237f038.chunk.js",
-    "main.js.map": "/the-tasting-app/static/js/main.5237f038.chunk.js.map",
-    "runtime-main.js": "/the-tasting-app/static/js/runtime-main.0e3e9165.js",
-    "runtime-main.js.map": "/the-tasting-app/static/js/runtime-main.0e3e9165.js.map",
-    "static/js/2.4dd9de12.chunk.js": "/the-tasting-app/static/js/2.4dd9de12.chunk.js",
-    "static/js/2.4dd9de12.chunk.js.map": "/the-tasting-app/static/js/2.4dd9de12.chunk.js.map",
-    "static/js/3.23e2a7a8.chunk.js": "/the-tasting-app/static/js/3.23e2a7a8.chunk.js",
-    "static/js/3.23e2a7a8.chunk.js.map": "/the-tasting-app/static/js/3.23e2a7a8.chunk.js.map",
+    "main.css": "/the-tasting-app/static/css/main.f855e6bc.css",
+    "main.js": "/the-tasting-app/static/js/main.66371f59.js",
+    "static/js/453.746f114d.chunk.js": "/the-tasting-app/static/js/453.746f114d.chunk.js",
     "index.html": "/the-tasting-app/index.html",
-    "static/css/main.a617e044.chunk.css.map": "/the-tasting-app/static/css/main.a617e044.chunk.css.map",
-    "static/js/2.4dd9de12.chunk.js.LICENSE.txt": "/the-tasting-app/static/js/2.4dd9de12.chunk.js.LICENSE.txt"
+    "main.f855e6bc.css.map": "/the-tasting-app/static/css/main.f855e6bc.css.map",
+    "main.66371f59.js.map": "/the-tasting-app/static/js/main.66371f59.js.map",
+    "453.746f114d.chunk.js.map": "/the-tasting-app/static/js/453.746f114d.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.0e3e9165.js",
-    "static/js/2.4dd9de12.chunk.js",
-    "static/css/main.a617e044.chunk.css",
-    "static/js/main.5237f038.chunk.js"
+    "static/css/main.f855e6bc.css",
+    "static/js/main.66371f59.js"
   ]
 }
