@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 //import inputMasterFile from './data/btg_master_list_20211003.json'
 //import inputMasterFile from 'https://github.com/mcqueene/the-tasting-app/blob/e4dd46ce51731314a8ec3c0d2d7a3f1db4e48704/btg_master_list_20211003.json'
 //import inputMasterFile from 'https://raw.githubusercontent.com/mcqueene/the-tasting-app/master/btg_master_list_20211003.json'
-import { DataGrid, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarExport, GridToolbarContainer  } from '@mui/x-data-grid';
 import { TextField, Box, Typography, Paper } from '@mui/material';
 import { sendGetRequest } from './FileService';
 import Button from '@mui/material/Button';
@@ -129,15 +129,17 @@ const App = (props) => {
       </GridToolbarContainer>
     );
   }
+  function getBeerName(params) {
+    if(params.row.Vintage.length === 0) {
+      return `${params.row.Beer}`;
+    }else {
+      return `${params.row.Beer } (${params.row.Vintage })`;
+    }
+  }
   const columns = [
     {
       field: "Beer",
-      valueGetter: ({ row }) => {
-        if (!row.Vintage) {
-          return row.Beer;
-        }
-        return row.Beer || '(' || row.Vintage ||')';
-      },
+      valueGetter: getBeerName,
       headerName: "Beer Name",
       sortable: true,
       width: 290,
@@ -151,6 +153,7 @@ const App = (props) => {
     {
       field: 'DateTasted',
       headerName: 'Date',
+      sortable: true,
       width: 115,
       editable: false,
     },
@@ -192,6 +195,7 @@ const App = (props) => {
       headerName: 'Vintage',
       width: 150,
       editable: false,
+      sortable: true,
     },
     {
       field: 'Container',
