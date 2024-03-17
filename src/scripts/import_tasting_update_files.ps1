@@ -2,6 +2,7 @@
 
 # 20240127 mrm add auto size to export excel 
 # 20240227 mrm add vintage to array that feeds TastingArrayToCalculatedArray, update sort to keyv2
+# 20240316 mrm add logic to check updates to stated styles
 
 $d_start = get-date
 $datestr = $d_start.ToString("yyyyMMdd")
@@ -18,8 +19,12 @@ if($yn_backup_current_files) {
     Copy-Item 'C:\Users\matt\OneDrive\Beer Club\NewCombinedList.xlsx' -Destination $backup_newcombined_file_excel
 }
 
-#read old combined list | reformat to old layout
+#read old combined list 
 [array]$sourcearray = Import-Excel -Path $inputfile_newcombinedlist -Raw 
+#get unique styles
+[array]$stylearray = $sourcearray | Select-Object StatedStyle -Unique |  Sort-Object StatedStyle    
+Write-Host 'found' $stylearray.Count 'styles'
+#reformat to old layout
 [array]$convertedarray = $sourcearray | Select-Object -Property @{name='Date';expression={$_.DateTasted}}, Beer, `
     @{name='Stated Style';expression={$_.'StatedStyle'}}, Container, Taste, Style, @{name='Overall Score ';expression={$_.OverallScore}}, `
     Brewer, City, @{name='State/Country';expression={$_.StateCountry}}, Comments, ABV, @{name='Org Gravity';expression={$_.OrgGravity}}, IBU, Vintage
@@ -39,9 +44,20 @@ foreach($updatefile in $updatefilelist) {
     [array]$filecontents = @()
     [string]$filepath = $sourcedirupdatefiles + $updatefile
     $filecontents = Import-Excel -Path $filepath -Raw
+    [array]$importedstylelist = $filecontents | Select-Object 'Stated Style' -Unique
+    foreach($newstyle in $importedstylelist) {
+        [string]$instyle = $newstyle.'Stated Style'
+        #Write-Host 'searching for ' $instyle
+        [string]$foundstyle = $stylearray | Where-Object -Property 'StatedStyle' -eq $instyle
+        if($foundstyle -eq '') {
+            Write-Host -ForegroundColor Red 'style not found' $instyle
+            Exit 10
+        }
+    }
     $expectedrowcount += $filecontents.Count
     $mergearray += TastingArrayToCalculatedArray -InputArray $filecontents -FileName $updatefile
     $filecount++
+    Write-Host 'no style errors found on file' $filepath
 }
 $mergearray | 
     Sort-Object -Property DateTasted -Descending |
