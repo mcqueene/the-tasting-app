@@ -34,13 +34,13 @@ foreach($beer in $json_objs) {
     $key = NormalizeKey -InputKey $beername
     [string]$shortbrewername = ShortenBrewer -InputString $brewery
     $keyBeerBrewer = NormalizeKey -InputKey ($beername + $shortbrewername)
-    Write-Host $beveragetype $beername $keyBeerBrewer
+    #Write-Host $beveragetype $beername $keyBeerBrewer
     #Write-Host $tapnumber $dayson $beername $brewery $brewerylocation $beveragetype $shortbrewername $keyBeerBrewer
 
     if($beveragetype -eq 'Beer'){
         #[array]$foundlist = $newmasterlist | Where-Object Beer -Match $beername
         #[array]$foundlist = $newmasterlist | Where-Object key -Match $key
-        Write-Host 'searching' $beername $brewery $shortbrewername $keyBeerBrewer
+        #Write-Host 'searching' $beername $brewery $shortbrewername $keyBeerBrewer
         [array]$foundlist = $newmasterlist | Where-Object keyBeerBrewer -Match $keyBeerBrewer
 
         #$find = $ht_source[$key]
@@ -77,7 +77,16 @@ foreach($beer in $json_objs) {
 Remove-Item -Path 'c:\users\matt\OneDrive\Beer Club\TG_NotFound_List.xlsx'  -Force
 Remove-Item -Path 'c:\users\matt\OneDrive\Beer Club\TG_JustTapped_List.xlsx'  -Force
 
-$notfound | Export-Excel -Path 'c:\users\matt\OneDrive\Beer Club\TG_NotFound_List.xlsx' -TableName 'NotFound' -TableStyle Medium16 -Show
-$justtapped | Export-Excel -Path 'c:\users\matt\OneDrive\Beer Club\TG_JustTapped_List.xlsx' -TableName 'JustTapped' -TableStyle Medium16 -Show
+$excelpkg1 = $notfound | Export-Excel -PassThru  -WorksheetName 'NotFound' -Path 'c:\users\matt\OneDrive\Beer Club\TG_NotFound_List.xlsx' -TableName 'NotFound' -TableStyle Medium16
+Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "NotFound" -Column 2 -Width 30
+Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "NotFound" -Column 4 -Width 15
+Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "NotFound" -Column 5 -Width 25
+$excelpkg2 = $justtapped | Export-Excel -PassThru  -WorksheetName 'JustTapped' -Path 'c:\users\matt\OneDrive\Beer Club\TG_JustTapped_List.xlsx' -TableName 'JustTapped' -TableStyle Medium16
+Set-ExcelColumn -ExcelPackage $excelpkg2 -WorksheetName "JustTapped" -Column 2 -Width 30
+Set-ExcelColumn -ExcelPackage $excelpkg2 -WorksheetName "JustTapped" -Column 4 -Width 15
+Set-ExcelColumn -ExcelPackage $excelpkg2 -WorksheetName "JustTapped" -Column 5 -Width 25
+
+Close-ExcelPackage -ExcelPackage $excelpkg1 -Show
+Close-ExcelPackage -ExcelPackage $excelpkg2 -Show
 
 $justtapped
