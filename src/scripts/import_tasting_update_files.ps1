@@ -50,8 +50,12 @@ foreach($updatefile in $updatefilelist) {
         #Write-Host 'searching for ' $instyle
         [string]$foundstyle = $stylearray | Where-Object -Property 'StatedStyle' -eq $instyle
         if($foundstyle -eq '') {
-            Write-Host -ForegroundColor Red 'style not found' $instyle
-            Exit 10
+            if($instyle -like '*Other Beverage*') {
+                #do nothing
+            } else {
+                Write-Host -ForegroundColor Red 'style not found' $instyle
+                Exit 10    
+            }
         }
     }
     $expectedrowcount += $filecontents.Count
