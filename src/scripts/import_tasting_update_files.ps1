@@ -3,6 +3,7 @@
 # 20240127 mrm add auto size to export excel 
 # 20240227 mrm add vintage to array that feeds TastingArrayToCalculatedArray, update sort to keyv2
 # 20240316 mrm add logic to check updates to stated styles
+# 20240712 mrm add row number to style error message
 
 $d_start = get-date
 $datestr = $d_start.ToString("yyyyMMdd")
@@ -45,7 +46,9 @@ foreach($updatefile in $updatefilelist) {
     [string]$filepath = $sourcedirupdatefiles + $updatefile
     $filecontents = Import-Excel -Path $filepath -Raw
     [array]$importedstylelist = $filecontents | Select-Object 'Stated Style' -Unique
+    [int] $cnt = 0
     foreach($newstyle in $importedstylelist) {
+        $cnt++
         [string]$instyle = $newstyle.'Stated Style'
         #Write-Host 'searching for ' $instyle
         [string]$foundstyle = $stylearray | Where-Object -Property 'StatedStyle' -eq $instyle
@@ -53,7 +56,7 @@ foreach($updatefile in $updatefilelist) {
             if($instyle -like '*Other Beverage*') {
                 #do nothing
             } else {
-                Write-Host -ForegroundColor Red 'style not found' $instyle
+                Write-Host -ForegroundColor Red 'style not found' $instyle 'record number' $cnt 'file' $filepath
                 Exit 10    
             }
         }
