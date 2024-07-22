@@ -67,11 +67,17 @@ $mergearray |
 [array]$sortedarray = $null
 $sortedarray += $newarray
 $sortedarray += $mergearray
+
 Write-Host 'found' $filecount 'files with' $mergearray.Count 'rows adding to master count' $newarray.Count 'presort count' $sortedarray.Count
 #sort
 $sortedarray = $sortedarray | Sort-Object keyv2 -Unique | Sort-Object -Property @{Expression = "DateTasted"; Descending = $true}, @{Expression = "Beer"; Descending = $false}
 if($expectedrowcount -ne $sortedarray.Count) {
     Write-Host -ForegroundColor Red "newarray count="$newarray.Count "merge count="$mergearray.Count "expected count="$expectedrowcount "sorted count="$sortedarray.Count
+    Write-Host 'checking newarray'
+    $newarray | Group-Object keyv2 |  Where-Object Count -gt 1
+    Write-Host 'checking sortedarray'
+    $sortedarray | Group-Object keyv2 |  Where-Object Count -gt 1
+    #$mergearray | Group-Object keyv2 |  Where-Object Count -gt 1
     Exit
 }
 Write-Host 'Process complete - wrapping up'
@@ -98,7 +104,10 @@ if($yn_update_files -eq 'y') {
     Copy-Item $fullpath_btg_master_list $fullpath_app_uploadfile
     Write-Host 'updating new combined excel file' $fullpath_new_combined_excel
     Remove-Item -Path $fullpath_new_combined_excel -Force
-    $sortedarray | Export-Excel -AutoSize -Path $fullpath_new_combined_excel -TableName 'MasterBeerList' -TableStyle Medium16 -Show
+    $excelpkg1 = $sortedarray | Export-Excel -PassThru -WorksheetName "MasterBeerList" -Path $fullpath_new_combined_excel -TableName 'MasterBeerList' -TableStyle Medium16 
+    Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "MasterBeerList" -Column 15 -Width 80
+    Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "MasterBeerList" -Column 1 -Width 40
+    Close-ExcelPackage -ExcelPackage $excelpkg1 -Show
 } else {
     Write-Host -ForegroundColor Yellow 'skipping update of files'
 }
