@@ -1,5 +1,6 @@
 ﻿
 # 20240114 mrm fixed normalizebrewer to only replace at end of string with \s*$
+# 20240726 mrm added meadery to the shorten brewer
 
 <#
 '2020 matt' -replace "^([2][0][012][0-9])", '**'
@@ -20,6 +21,7 @@ function ShortenBrewer{
     $newvalue = $newvalue -replace 'Brewing Co.',''
     $newvalue = $newvalue -replace 'Brewing',''
     $newvalue = $newvalue -replace 'Brewery',''
+    $newvalue = $newvalue -replace 'Meadery',''
     return $newvalue
 }
 
