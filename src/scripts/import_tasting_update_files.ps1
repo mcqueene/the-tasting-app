@@ -113,6 +113,8 @@ if($yn_update_files -eq 'y') {
     Remove-Item -Path $fullpath_new_combined_excel -Force
     $excelpkg1 = $sortedarray | Export-Excel -PassThru -WorksheetName "MasterBeerList" -Path $fullpath_new_combined_excel -TableName 'MasterBeerList' -TableStyle Medium16 
     Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "MasterBeerList" -Column 15 -Width 80
+    Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "MasterBeerList" -Column 8 -Width 45
+    Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "MasterBeerList" -Column 3 -Width 25
     Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "MasterBeerList" -Column 1 -Width 40
     Close-ExcelPackage -ExcelPackage $excelpkg1 -Show
 } else {
