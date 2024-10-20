@@ -4,6 +4,7 @@
 # 20240227 mrm add vintage to array that feeds TastingArrayToCalculatedArray, update sort to keyv2
 # 20240316 mrm add logic to check updates to stated styles
 # 20240712 mrm add row number to style error message
+# 20241013 mrm when git fails try this https://www.geeksforgeeks.org/how-to-fix-erroryou-have-not-concluded-your-merge-mergehead-exists/
 
 $d_start = get-date
 $datestr = $d_start.ToString("yyyyMMdd")
