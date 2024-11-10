@@ -3,6 +3,7 @@
 #20240114 mrm copied from tasting_file_to_array_function.ps1
 #20240119 mrm changed relative directory to direct path
 #20240227 mrm add vintage to array that feeds TastingArrayToCalculatedArray, add new key
+#20241109 mrm add container to keyv2 for when can and draft appear in same tasting
 
 function Test-DateTimePattern
 {
@@ -133,7 +134,7 @@ function TastingArrayToCalculatedArray{
         [string]$IBU = $row.IBU
         [string]$OrgGravity = $row."Org Gravity"
         [string]$key = $Beer + $DateTasted
-        [string]$keyv2 = $Beer + $DateTasted + $Vintage
+        [string]$keyv2 = $Beer + $DateTasted + $Vintage + $Container
         [string]$shortbrewername = ShortenBrewer -InputString $s_Brewer
         [string]$keyBeerBrewer = $Beer + $shortbrewername
         $key = NormalizeKey -InputKey $key

@@ -79,6 +79,7 @@ $sortedarray += $mergearray
 Write-Host 'found' $filecount 'files with' $mergearray.Count 'rows adding to master count' $newarray.Count 'presort count' $sortedarray.Count
 #sort
 $sortedarray = $sortedarray | Sort-Object keyv2 -Unique | Sort-Object -Property @{Expression = "DateTasted"; Descending = $true}, @{Expression = "Beer"; Descending = $false}
+
 if($expectedrowcount -ne $sortedarray.Count) {
     Write-Host -ForegroundColor Red "newarray count="$newarray.Count "merge count="$mergearray.Count "expected count="$expectedrowcount "sorted count="$sortedarray.Count
     Write-Host 'checking newarray'
