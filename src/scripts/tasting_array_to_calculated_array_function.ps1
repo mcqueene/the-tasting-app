@@ -4,6 +4,7 @@
 #20240119 mrm changed relative directory to direct path
 #20240227 mrm add vintage to array that feeds TastingArrayToCalculatedArray, add new key
 #20241109 mrm add container to keyv2 for when can and draft appear in same tasting
+#20241116 mrm removed call to normalize style because it was changing the fix to american barleywine
 
 function Test-DateTimePattern
 {
@@ -79,7 +80,7 @@ function TastingArrayToCalculatedArray{
         }
         [string]$StatedStyle = $row."Stated Style"
         $StatedStyle = $StatedStyle.Trim()
-        $StatedStyle = NormalizeStyle -InputString $StatedStyle
+        #mrm20241116 $StatedStyle = NormalizeStyle -InputString $StatedStyle
 
 
         [string]$Container = $row.Container
