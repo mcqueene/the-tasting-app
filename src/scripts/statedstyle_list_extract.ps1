@@ -1,6 +1,7 @@
 ﻿#
 # 20240119 mrm added worksheet for error list
 # 20240211 mrm add sheet for unique brewer names
+# 20250103 mrm add yearly list
 
 [array]$sourcearray = @()
 $sourcearray = Import-Excel -Path 'C:\Users\matt\OneDrive\Beer Club\NewCombinedList.xlsx' -Raw
@@ -51,6 +52,48 @@ foreach($row in $toparray) {
     }
 }
 
+[array]$yeartodatelist = @()
+$yeararray = $sourcearray | Where-Object -Property DateTasted -Like '2024*'
+Write-Host 'Yearly count = ' $yeararray.Count
+$yeararraybyStyle = $yeararray | Group-Object StatedStyle | Sort-Object Name 
+Write-Host 'Yearly group count = ' $yeararraybyStyle.Count
+foreach($row in $yeararraybyStyle) {
+    [string]$style = $row.Name
+    $sortedyearlyarray = $row.Group | Sort-Object OverallScore, DateTasted -Descending 
+    foreach($g in $sortedyearlyarray) {
+        $obj = new-object PSObject
+        $obj | add-member -membertype NoteProperty -name "Style" -Value $style
+        $obj | add-member -membertype NoteProperty -name "Beer" -Value $g.Beer
+        $obj | add-member -membertype NoteProperty -name "Brewer" -Value $g.Brewer
+        $obj | add-member -membertype NoteProperty -name "StateCountry" -Value $g.StateCountry
+        $obj | add-member -membertype NoteProperty -name "ABV" -Value $g.ABV
+        $obj | add-member -membertype NoteProperty -name "DateTasted" -Value $g.DateTasted
+        $obj | add-member -membertype NoteProperty -name "OverallScore" -Value $g.OverallScore
+        $yeartodatelist += $obj    
+    }
+}
+[array]$yeartodatestyle = @()
+foreach($row in $yeararraybyStyle) {
+    [string]$style = $row.Name
+    [int]$count = $row.Count
+    [decimal]$abv = 0
+    [decimal]$avgscore = 0
+    [string]$beerlist = ''
+    foreach($g in $row.Group) {
+        $avgscore += $g.OverallScore
+        $abv += $g.ABV
+        [string]$temp = $g.Beer
+        $beerlist += ($temp + ';')
+    }
+    $obj = new-object PSObject
+    $obj | add-member -membertype NoteProperty -name "Style" -Value $style
+    $obj | add-member -membertype NoteProperty -name "Count" -Value $count
+    $obj | add-member -membertype NoteProperty -name "AvgScore" -Value ($avgscore / $count)
+    $obj | add-member -membertype NoteProperty -name "AvgABV" -Value ($abv / $count)
+    $obj | add-member -membertype NoteProperty -name "BeerList" -Value $beerlist
+    $yeartodatestyle += $obj
+}
+
 
 [array]$avgscorelist = @()
 $avgscorearray = $sourcearray | Where-Object -Property StatedStyle -NotLike 'Other Beverage*' | Group-Object DateTasted
@@ -85,6 +128,7 @@ Close-ExcelPackage -ExcelPackage $excelpkg3 -Show
 Write-Host 'removing old files'
 Remove-Item 'C:\Users\matt\OneDrive\Beer Club\StatedStyle.xlsx'
 Remove-Item 'C:\Users\matt\OneDrive\Beer Club\top5list.xlsx' 
+Remove-Item 'C:\Users\matt\OneDrive\Beer Club\yearlylist.xlsx' 
 $excelpkg1 = $array | Export-Excel -PassThru -AutoSize -WorksheetName 'Styles' -Path 'C:\Users\matt\OneDrive\Beer Club\StatedStyle.xlsx' -TableName 'Styles' -TableStyle Medium16 
 Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "Styles" -Column 1 -Width 30
 $sourcearray | Group-Object StatedStyle | Sort-Object Name | Select-Object Name, Count | Export-Excel -PassThru -AutoSize -WorksheetName 'StyleCount' -ExcelPackage $excelpkg1 -TableName 'StyleCount' -TableStyle Medium16 
@@ -92,10 +136,15 @@ Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "StyleCount" -Column 1 -
 $errorlist | Sort-Object Count, Style | Export-Excel -PassThru -AutoSize -WorksheetName 'LowCountStyles' -ExcelPackage $excelpkg1 -TableName 'LowCountStyles' -TableStyle Medium16 
 $brewerarray | Select-Object Name, Count | Sort-Object Name | Export-Excel -PassThru -AutoSize -WorksheetName 'BrewerCount' -ExcelPackage $excelpkg1 -TableName 'BrewerCount' -TableStyle Medium16 
 $excelpkg2 = $toplist | Export-Excel -PassThru -AutoSize -WorksheetName 'TopList' -Path 'C:\Users\matt\OneDrive\Beer Club\top5list.xlsx' -TableName 'TopList' -TableStyle Medium16 
-
+$excelpkg3 = $yeartodatelist | Export-Excel -PassThru -AutoSize -WorksheetName 'YearlyList' -Path 'C:\Users\matt\OneDrive\Beer Club\yearlylist.xlsx' -TableName 'YearlyList' -TableStyle Medium16 
+$yeartodatestyle | Sort-Object Count -Descending | Export-Excel -PassThru -AutoSize -WorksheetName 'StyleCount' -ExcelPackage $excelpkg3 -TableName 'StyleCount' -TableStyle Medium16 
+$yeararray | Group-Object Brewer, City, StateCountry  | Select-Object Name, Count | Sort-Object Count -Descending | Export-Excel -PassThru -AutoSize -WorksheetName 'BrewerCountYear' -ExcelPackage $excelpkg3 -TableName 'BrewerCountYear' -TableStyle Medium16 
+$yeararray | Group-Object DateTasted | Select-Object Name, Count | Sort-Object Count -Descending | Export-Excel -PassThru -AutoSize -WorksheetName 'DateCountYear' -ExcelPackage $excelpkg3 -TableName 'DateCountYear' -TableStyle Medium16 
+$yeararray | Sort-Object OverallScore, DateTasted -Descending | Select-Object -First 100 | Export-Excel -PassThru -AutoSize -WorksheetName 'TopYear100' -ExcelPackage $excelpkg3 -TableName 'TopYear100' -TableStyle Medium16 
 
 Close-ExcelPackage -ExcelPackage $excelpkg1 -Show
 Close-ExcelPackage -ExcelPackage $excelpkg2 -Show
+Close-ExcelPackage -ExcelPackage $excelpkg3 -Show
 
 #Remove-Item 'C:\Users\matt\OneDrive\Beer Club\StatedStyle_Count.xlsx'
 #$sourcearray | Group-Object StatedStyle | Sort-Object Name | Select-Object Name, Count | Export-Excel -Path 'C:\Users\matt\OneDrive\Beer Club\StatedStyle_Count.xlsx' -TableName 'StyleCount' -TableStyle Medium16 -Show
