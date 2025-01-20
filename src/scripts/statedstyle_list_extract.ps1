@@ -65,6 +65,7 @@ foreach($row in $yeararraybyStyle) {
         $obj | add-member -membertype NoteProperty -name "Style" -Value $style
         $obj | add-member -membertype NoteProperty -name "Beer" -Value $g.Beer
         $obj | add-member -membertype NoteProperty -name "Brewer" -Value $g.Brewer
+        $obj | add-member -membertype NoteProperty -name "City" -Value $g.City
         $obj | add-member -membertype NoteProperty -name "StateCountry" -Value $g.StateCountry
         $obj | add-member -membertype NoteProperty -name "ABV" -Value $g.ABV
         $obj | add-member -membertype NoteProperty -name "DateTasted" -Value $g.DateTasted
