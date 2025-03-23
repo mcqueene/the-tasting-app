@@ -4,6 +4,7 @@
 #20220730 mrm added normalize functions to use new brewerybeer key
 #20240114 mrm update path to shared function files
 #20240119 mrm added direct path and removed change directory
+#20250321 mrm there was something going on with the tap feed that caused the json return to be different but later it fixed itself so I left the foreach logic in just in case
 
 #cd 'C:\Users\matt\OneDrive\Beer Club'
 [string]$tg_beer_list_json = Invoke-WebRequest -Uri  https://server.digitalpour.com/DashboardServer/api/v3/MenuItems/56ba39265e002c0c8446de27/1/Tap?apiKey=56ba38b25e002c0d38510298 
@@ -19,6 +20,7 @@ $json_objs = $tg_beer_list_json | ConvertFrom-Json
 [array]$justtapped = $null
 
 foreach($beer in $json_objs) {
+#foreach($beer in $json_objs.'$values') {
     $tapnumber = $beer.MenuItemDisplayDetail.DisplayName
     $dayson = $beer.MenuItemProductDetail.DaysOn
     $beername = $beer.MenuItemProductDetail.Beverage.BeverageName
