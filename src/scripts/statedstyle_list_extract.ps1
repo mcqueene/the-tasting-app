@@ -2,6 +2,7 @@
 # 20240119 mrm added worksheet for error list
 # 20240211 mrm add sheet for unique brewer names
 # 20250103 mrm add yearly list
+# 20250824 mrm updated year filter from 2024 to 2025
 
 [array]$sourcearray = @()
 $sourcearray = Import-Excel -Path 'C:\Users\matt\OneDrive\Beer Club\NewCombinedList.xlsx' -Raw
@@ -53,7 +54,7 @@ foreach($row in $toparray) {
 }
 
 [array]$yeartodatelist = @()
-$yeararray = $sourcearray | Where-Object -Property DateTasted -Like '2024*'
+$yeararray = $sourcearray | Where-Object -Property DateTasted -Like '2025*'
 Write-Host 'Yearly count = ' $yeararray.Count
 $yeararraybyStyle = $yeararray | Group-Object StatedStyle | Sort-Object Name 
 Write-Host 'Yearly group count = ' $yeararraybyStyle.Count
