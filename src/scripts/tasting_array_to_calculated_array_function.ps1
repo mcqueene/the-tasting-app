@@ -5,7 +5,7 @@
 #20240227 mrm add vintage to array that feeds TastingArrayToCalculatedArray, add new key
 #20241109 mrm add container to keyv2 for when can and draft appear in same tasting
 #20241116 mrm removed call to normalize style because it was changing the fix to american barleywine
-
+#20250915 mrm add brewer to keyv2 for when same beer name shows up in same tasting due to german trips
 function Test-DateTimePattern
 {
     param(
@@ -135,8 +135,8 @@ function TastingArrayToCalculatedArray{
         [string]$IBU = $row.IBU
         [string]$OrgGravity = $row."Org Gravity"
         [string]$key = $Beer + $DateTasted
-        [string]$keyv2 = $Beer + $DateTasted + $Vintage + $Container
         [string]$shortbrewername = ShortenBrewer -InputString $s_Brewer
+        [string]$keyv2 = $Beer + $DateTasted + $Vintage + $Container + $shortbrewername
         [string]$keyBeerBrewer = $Beer + $shortbrewername
         $key = NormalizeKey -InputKey $key
         $keyBeerBrewer = NormalizeKey -InputKey $keyBeerBrewer
