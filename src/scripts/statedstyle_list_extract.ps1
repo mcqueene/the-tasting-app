@@ -3,6 +3,7 @@
 # 20240211 mrm add sheet for unique brewer names
 # 20250103 mrm add yearly list
 # 20250824 mrm updated year filter from 2024 to 2025
+# 20251003 mrm add new report for perfect scores
 
 [array]$sourcearray = @()
 $sourcearray = Import-Excel -Path 'C:\Users\matt\OneDrive\Beer Club\NewCombinedList.xlsx' -Raw
@@ -13,6 +14,24 @@ Write-Host 'found' $array.Count 'styles'
 $array | Select-Object -First 5 
 
 #$sourcearray | Group-Object StatedStyle | Sort-Object Name | Where-Object Count -eq 1 | Select-Object Name, Count, Group.Beer, Group.Brewer, Group.StateCountry, Group.ABV, Group.DateTasted
+
+[array]$perfectarray = @()
+$perfectarray = $sourcearray | Where-Object -Property StatedStyle -NotLike 'Other Beverage*' | Where-Object -Property OverallScore -EQ '10'
+[array]$perfectlist = @()
+foreach($row in $perfectarray) {
+    [string]$strdate = [string]($row.DateTasted)
+    [string]$year = $strdate.Substring(0,4)
+    $obj = new-object PSObject
+    $obj | add-member -membertype NoteProperty -name "Beer" -Value $row.Beer
+    $obj | add-member -membertype NoteProperty -name "DateTasted" -Value $row.DateTasted
+    $obj | add-member -membertype NoteProperty -name "DateString" -Value $strdate
+    $obj | add-member -membertype NoteProperty -name "Year" -Value $year
+    $obj | add-member -membertype NoteProperty -name "Style" -Value $row.StatedStyle
+    $obj | add-member -membertype NoteProperty -name "Brewer" -Value $row.Brewer
+    $obj | add-member -membertype NoteProperty -name "StateCountry" -Value $row.StateCountry
+    $obj | add-member -membertype NoteProperty -name "ABV" -Value $row.ABV
+    $perfectlist += $obj    
+}
 
 [array]$brewerarray = @()
 $brewerarray = $sourcearray | Where-Object -Property StatedStyle -NotLike 'Other Beverage*' | Group-Object Brewer, City, StateCountry  | Sort-Object Brewer 
@@ -126,11 +145,11 @@ $excelpkg3 = $avgscorelist | Export-Excel -PassThru -AutoSize -WorksheetName 'Av
 Set-ExcelColumn -ExcelPackage $excelpkg3 -WorksheetName "AvgScores" -Column 5 -Width 150
 Close-ExcelPackage -ExcelPackage $excelpkg3 -Show
 
-
 Write-Host 'removing old files'
 Remove-Item 'C:\Users\matt\OneDrive\Beer Club\StatedStyle.xlsx'
 Remove-Item 'C:\Users\matt\OneDrive\Beer Club\top5list.xlsx' 
 Remove-Item 'C:\Users\matt\OneDrive\Beer Club\yearlylist.xlsx' 
+Remove-Item 'C:\Users\matt\OneDrive\Beer Club\perfectscorelist.xlsx' 
 $excelpkg1 = $array | Export-Excel -PassThru -AutoSize -WorksheetName 'Styles' -Path 'C:\Users\matt\OneDrive\Beer Club\StatedStyle.xlsx' -TableName 'Styles' -TableStyle Medium16 
 Set-ExcelColumn -ExcelPackage $excelpkg1 -WorksheetName "Styles" -Column 1 -Width 30
 $sourcearray | Group-Object StatedStyle | Sort-Object Name | Select-Object Name, Count | Export-Excel -PassThru -AutoSize -WorksheetName 'StyleCount' -ExcelPackage $excelpkg1 -TableName 'StyleCount' -TableStyle Medium16 
@@ -143,10 +162,13 @@ $yeartodatestyle | Sort-Object Count -Descending | Export-Excel -PassThru -AutoS
 $yeararray | Group-Object Brewer, City, StateCountry  | Select-Object Name, Count | Sort-Object Count -Descending | Export-Excel -PassThru -AutoSize -WorksheetName 'BrewerCountYear' -ExcelPackage $excelpkg3 -TableName 'BrewerCountYear' -TableStyle Medium16 
 $yeararray | Group-Object DateTasted | Select-Object Name, Count | Sort-Object Count -Descending | Export-Excel -PassThru -AutoSize -WorksheetName 'DateCountYear' -ExcelPackage $excelpkg3 -TableName 'DateCountYear' -TableStyle Medium16 
 $yeararray | Sort-Object OverallScore, DateTasted -Descending | Select-Object -First 100 | Export-Excel -PassThru -AutoSize -WorksheetName 'TopYear100' -ExcelPackage $excelpkg3 -TableName 'TopYear100' -TableStyle Medium16 
+$excelpkg4 = $perfectarray | Sort-Object DateTasted -Descending | Export-Excel -PassThru -AutoSize -WorksheetName 'PerfectScoreList' -Path 'C:\Users\matt\OneDrive\Beer Club\perfectscorelist.xlsx' -TableName 'PerfectScoreMaster' -TableStyle Medium16 
+$perfectlist | Sort-Object DateTasted -Descending | Export-Excel -PassThru -AutoSize -WorksheetName 'SubList' -ExcelPackage $excelpkg4 -TableName 'PerfectScoreYearly' -TableStyle Medium16 
 
 Close-ExcelPackage -ExcelPackage $excelpkg1 -Show
 Close-ExcelPackage -ExcelPackage $excelpkg2 -Show
 Close-ExcelPackage -ExcelPackage $excelpkg3 -Show
+Close-ExcelPackage -ExcelPackage $excelpkg4 -Show
 
 #Remove-Item 'C:\Users\matt\OneDrive\Beer Club\StatedStyle_Count.xlsx'
 #$sourcearray | Group-Object StatedStyle | Sort-Object Name | Select-Object Name, Count | Export-Excel -Path 'C:\Users\matt\OneDrive\Beer Club\StatedStyle_Count.xlsx' -TableName 'StyleCount' -TableStyle Medium16 -Show
