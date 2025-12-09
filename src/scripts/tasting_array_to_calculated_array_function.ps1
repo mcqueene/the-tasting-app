@@ -38,6 +38,7 @@ function TastingArrayToCalculatedArray{
     if($InputArray.Count -ne $filteredarray.Count) {
         Write-Host -ForegroundColor Red 'inputarray='$InputArray.Count 'filteredarray='$filteredarray.Count
     }
+    Write-Host 'TastingArrayToCalculatedArray called on file' $FileName
 
     [array]$newarray = $null
     foreach($row in $filteredarray) {
@@ -89,7 +90,7 @@ function TastingArrayToCalculatedArray{
         if($row.Taste -as [decimal]) {
             $Taste = $row.Taste
         } else {
-            Write-Host 'Error on row' $rowcount 'beer' $Beer 'with taste value:' $row.Taste
+            #Write-Host 'Error on row' $rowcount 'beer' $Beer 'with taste value:' $row.Taste
         }
         [decimal]$Style = 0
         if($row.Style -as [decimal])

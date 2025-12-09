@@ -51,7 +51,7 @@ foreach($updatefile in $updatefilelist) {
     foreach($newstyle in $importedstylelist) {
         $cnt++
         [string]$instyle = $newstyle.'Stated Style'
-        #Write-Host 'searching for ' $instyle
+        Write-Host 'searching for ' $instyle 'on file' $updatefile
         [string]$foundstyle = $stylearray | Where-Object -Property 'StatedStyle' -eq $instyle
         if($foundstyle -eq '') {
             if($instyle -like '*Other Beverage*') {
