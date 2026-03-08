@@ -4,6 +4,7 @@
 # 20250103 mrm add yearly list
 # 20250824 mrm updated year filter from 2024 to 2025
 # 20251003 mrm add new report for perfect scores
+# 20260307 mrm change filter from 2025 to 2026
 
 [array]$sourcearray = @()
 $sourcearray = Import-Excel -Path 'C:\Users\matt\OneDrive\Beer Club\NewCombinedList.xlsx' -Raw
@@ -73,7 +74,7 @@ foreach($row in $toparray) {
 }
 
 [array]$yeartodatelist = @()
-$yeararray = $sourcearray | Where-Object -Property DateTasted -Like '2025*'
+$yeararray = $sourcearray | Where-Object -Property DateTasted -Like '2026*'
 Write-Host 'Yearly count = ' $yeararray.Count
 $yeararraybyStyle = $yeararray | Group-Object StatedStyle | Sort-Object Name 
 Write-Host 'Yearly group count = ' $yeararraybyStyle.Count
