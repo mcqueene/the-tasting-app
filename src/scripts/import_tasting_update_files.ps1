@@ -5,6 +5,7 @@
 # 20240316 mrm add logic to check updates to stated styles
 # 20240712 mrm add row number to style error message
 # 20241013 mrm when git fails try this https://www.geeksforgeeks.org/how-to-fix-erroryou-have-not-concluded-your-merge-mergehead-exists/
+# 20260904 mrm added error check for merge of sorted files
 
 $d_start = get-date
 $datestr = $d_start.ToString("yyyyMMdd")
@@ -39,6 +40,7 @@ $newarray = TastingArrayToCalculatedArray -InputArray $convertedarray -FileName 
 $updatefilelist = Get-ChildItem -Path "C:\Users\matt\OneDrive\Beer Club\" -Filter '*taste update*.xlsx'
 
 [int]$expectedrowcount = $newarray.Count
+Write-Host 'starting expectedrowcount from newarry.count is' $expectedrowcount
 #loop update files thru array function to generate a merge array
 [array]$mergearray = @()
 [int]$filecount = 0
@@ -51,7 +53,7 @@ foreach($updatefile in $updatefilelist) {
     foreach($newstyle in $importedstylelist) {
         $cnt++
         [string]$instyle = $newstyle.'Stated Style'
-        Write-Host 'searching for ' $instyle 'on file' $updatefile
+        #Write-Host 'searching for ' $instyle 'on file' $updatefile
         [string]$foundstyle = $stylearray | Where-Object -Property 'StatedStyle' -eq $instyle
         if($foundstyle -eq '') {
             if($instyle -like '*Other Beverage*') {
@@ -65,8 +67,9 @@ foreach($updatefile in $updatefilelist) {
     $expectedrowcount += $filecontents.Count
     $mergearray += TastingArrayToCalculatedArray -InputArray $filecontents -FileName $updatefile
     $filecount++
-    Write-Host 'no style errors found on file' $filepath
+    Write-Host 'no style errors found on file' $filepath 'expectedrowcount now' $expectedrowcount 'mergedarrycounnt' $mergearray.Count
 }
+Write-Host 'files done mergearray count' $mergearray.Count 'expectedrowcount' $expectedrowcount
 $mergearray | 
     Sort-Object -Property DateTasted -Descending |
     ConvertTo-Json -depth 100 -Compress | Out-File -Encoding ASCII ($sourcedirupdatefiles + "merged_update_list.json")
@@ -75,10 +78,16 @@ $mergearray |
 [array]$sortedarray = $null
 $sortedarray += $newarray
 $sortedarray += $mergearray
+#holding copy of presort file for when merging multiple files throws error we can't find
+[array]$temp_presort_error_file = $null
+$temp_presort_error_file += $sortedarray
 
-Write-Host 'found' $filecount 'files with' $mergearray.Count 'rows adding to master count' $newarray.Count 'presort count' $sortedarray.Count
+Write-Host 'found' $filecount 'files with' $mergearray.Count 'rows adding to master count' $newarray.Count 'presort count' $sortedarray.Count 'temp_presort count' $temp_presort_error_file.Count
+Write-Host 'checking sortedarray before last sort'
+$sortedarray | Group-Object keyv2 |  Where-Object Count -gt 1
 #sort
 $sortedarray = $sortedarray | Sort-Object keyv2 -Unique | Sort-Object -Property @{Expression = "DateTasted"; Descending = $true}, @{Expression = "Beer"; Descending = $false}
+Write-Host 'post last sort sortedarraycount' $sortedarray.Count
 
 if($expectedrowcount -ne $sortedarray.Count) {
     Write-Host -ForegroundColor Red "newarray count="$newarray.Count "merge count="$mergearray.Count "expected count="$expectedrowcount "sorted count="$sortedarray.Count
@@ -86,7 +95,15 @@ if($expectedrowcount -ne $sortedarray.Count) {
     $newarray | Group-Object keyv2 |  Where-Object Count -gt 1
     Write-Host 'checking sortedarray'
     $sortedarray | Group-Object keyv2 |  Where-Object Count -gt 1
-    #$mergearray | Group-Object keyv2 |  Where-Object Count -gt 1
+    Write-Host 'checking mergearray'
+    $mergearray | Group-Object keyv2 |  Where-Object Count -gt 1
+    [string]$fullpath_error_file = ($sourcedirupdatefiles + "ErrorCheckSortFile.xlsx")    
+    Write-Host 'dumping presort file for error check' $fullpath_error_file 
+    $excelpkg2 = $sortedarray | Export-Excel -PassThru -WorksheetName "PreSortErrorCheck" -Path $fullpath_error_file -TableName 'PreSortErrorCheck' -TableStyle Medium16 
+    $sortedarray | Export-Excel -PassThru -ExcelPackage $excelpkg2 -WorksheetName "SortedArray" -TableName 'SortedArray' -TableStyle Medium16 
+    $mergearray | Export-Excel -PassThru -ExcelPackage $excelpkg2 -WorksheetName "MergeArray" -TableName 'MergeArray' -TableStyle Medium16 
+    Close-ExcelPackage -ExcelPackage $excelpkg2 -Show
+    Write-Host -ForegroundColor Red "Exiting"
     Exit
 }
 Write-Host 'Process complete - wrapping up'
