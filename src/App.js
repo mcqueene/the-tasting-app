@@ -11,6 +11,10 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 //import { makeStyles } from '@mui/styles';
 
+// to run type npm start
+// 20261123 mrm changed initial sort to be on DateTested instead of Beer
+//              changed div tag around data grid from <div style={{ height: 600, width: '98%' }}>
+
 const App = (props) => {
 
   //const url = 'https://raw.githubusercontent.com/mcqueene/the-tasting-app/master/btg_master_list_20211003.json'
@@ -84,8 +88,12 @@ const App = (props) => {
     setupdatedOn(firstobj.DateTasted)
     console.log('last taste date', firstobj)
 
-    const sortedArray = [...changeFile].sort((a, b) => a.Beer > b.Beer ? 1 : -1);
+    //const sortedArray = [...changeFile].sort((a, b) => a.Beer > b.Beer ? 1 : -1);
+    const sortedArray = [...changeFile].sort((a, b) => a.DateTasted > b.DateTasted ? 1 : -1);
+    //const sortedArray = [...changeFile].sort((a, b) => new Date(b.DateTasted) > new Date(a.DateTasted) );
+    //const sorted = [...data].sort((a, b) => new Date(b.date) - new Date(a.date));
 
+    console.log('array sorted', sortedArray[0])
     setinputMasterFile(sortedArray)
   }
 
@@ -285,7 +293,8 @@ const App = (props) => {
             </Stack>
           </Box>
         </Box>
-        <div style={{ height: 600, width: '98%' }}>
+        
+        <div style={{ flex: 1, minHeight: 0, width: '100%' }}>
           <DataGrid
             rows={inputMasterListArray}
             columns={columns}
@@ -303,8 +312,8 @@ const App = (props) => {
               sorting: {
                 sortModel: [
                   {
-                    field: 'Beer',
-                    sort: 'asc',
+                    field: 'DateTasted',
+                    sort: 'desc',
                   }
                 ],
               },
@@ -313,7 +322,7 @@ const App = (props) => {
         </div>
 
       </Box>
-      <Typography align="center" variant="subtitle2">Last updated 10/23/2022</Typography>
+      <Typography align="center" variant="subtitle2">Last updated 11/23/2026</Typography>
     </Paper>
 
   );
